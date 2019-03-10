@@ -33,7 +33,7 @@ public class StarterApplication extends Application {
         object.put("myNumber", "123");
         object.put("myString", "test");
 
-        object.saveInBackground(new SaveCallback() {
+        /*object.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException ex) {
                 if (ex == null) {
@@ -42,7 +42,7 @@ public class StarterApplication extends Application {
                     Log.i("Parse Result", "Failed" + ex.toString());
                 }
             }
-        });
+        });*/
 
         ParseACL defaultACL = new ParseACL();
         defaultACL.setPublicReadAccess(true);
