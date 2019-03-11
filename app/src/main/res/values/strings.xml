@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Movers</string>
     <string name="app_logo">App logo</string>
+    <string name="koltozkodo">Költözködő</string>
+    <string name="koltozteto">Költöztető</string>
+    <string name="get_started">Get Started</string>
 </resources>
