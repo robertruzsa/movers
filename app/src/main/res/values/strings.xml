@@ -4,4 +4,6 @@
     <string name="koltozkodo">Költözködő</string>
     <string name="koltozteto">Költöztető</string>
     <string name="get_started">Get Started</string>
+    <string name="folytatas">Folytatás</string>
+    <string name="insturction">Költözkődő vagy Költöztető módban szeretné használni az alkalmazást?</string>
 </resources>

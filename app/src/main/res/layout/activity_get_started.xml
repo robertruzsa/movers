@@ -11,25 +11,25 @@
         android:layout_width="175dp"
         android:layout_height="175dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="8dp"
         android:transitionName="logoTransition"
-        app:layout_constraintBottom_toTopOf="@+id/switch1"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_app_logo" />
 
     <Switch
-        android:id="@+id/switch1"
+        android:id="@+id/mSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:theme="@style/SwitchCompatTheme"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/logoImageView" />
 
     <TextView
         android:id="@+id/clientTextView"
@@ -38,9 +38,10 @@
         android:layout_marginEnd="8dp"
         android:text="@string/koltozkodo"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/switch1"
-        app:layout_constraintEnd_toStartOf="@+id/switch1"
-        app:layout_constraintTop_toTopOf="@+id/switch1" />
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/mSwitch"
+        app:layout_constraintEnd_toStartOf="@+id/mSwitch"
+        app:layout_constraintTop_toTopOf="@+id/mSwitch" />
 
     <TextView
         android:id="@+id/moverTextView"
@@ -48,24 +49,34 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="@string/koltozteto"
+        android:textColor="@color/colorBlueInactive"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/switch1"
-        app:layout_constraintStart_toEndOf="@+id/switch1"
-        app:layout_constraintTop_toTopOf="@+id/switch1" />
+        app:layout_constraintBottom_toBottomOf="@+id/mSwitch"
+        app:layout_constraintStart_toEndOf="@+id/mSwitch"
+        app:layout_constraintTop_toTopOf="@+id/mSwitch" />
 
     <Button
         android:id="@+id/getStartedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/rounded_button"
         android:padding="15dp"
-        android:text="@string/get_started"
+        android:text="@string/folytatas"
         android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switch1" />
+        app:layout_constraintTop_toBottomOf="@+id/mSwitch" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
 
 </android.support.constraint.ConstraintLayout>
