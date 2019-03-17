@@ -5,5 +5,7 @@
     <string name="koltozteto">Költöztető</string>
     <string name="get_started">Get Started</string>
     <string name="folytatas">Folytatás</string>
-    <string name="insturction">Költözkődő vagy Költöztető módban szeretné használni az alkalmazást?</string>
+    <string name="instruction_get_started">Költözkődő vagy Költöztető módban\nszeretné használni az alkalmazást?</string>
+    <string name="instruction_phone_number">Adja meg telefonszámát,\nhogy felvehessük Önnel a kapcsolatot.</string>
+    <string name="tovabb">Tovább</string>
 </resources>

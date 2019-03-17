@@ -1,18 +1,17 @@
 package com.robertruzsa.movers;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class GetStartedActivity extends AppCompatActivity {
 
@@ -24,13 +23,12 @@ public class GetStartedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_started);
 
-        /*Toast toast = Toast.makeText(this, R.string.insturction, Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();*/
-
         clientTextView = findViewById(R.id.clientTextView);
         moverTextView = findViewById(R.id.moverTextView);
         mSwitch = findViewById(R.id.mSwitch);
+
+        TextView instructionTextView = findViewById(R.id.instructionTextView);
+        Instruction.show(instructionTextView, R.string.instruction_get_started);
 
         final Typeface font = ResourcesCompat.getFont(this, R.font.open_sans);
         final int colorGray = ContextCompat.getColor(this, R.color.colorBlueInactive);
@@ -60,5 +58,10 @@ public class GetStartedActivity extends AppCompatActivity {
         ImageView tvLogo = findViewById(R.id.logoImageView);
         tvLogo.setVisibility(View.INVISIBLE);
         super.onBackPressed();
+    }
+
+    public void next(View view) {
+        Intent intent = new Intent(getApplicationContext(), GetPhoneNumberActivity.class);
+        startActivity(intent);
     }
 }

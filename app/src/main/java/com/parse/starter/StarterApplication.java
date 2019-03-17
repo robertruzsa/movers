@@ -29,11 +29,11 @@ public class StarterApplication extends Application {
                 .build()
         );
 
-        ParseObject object = new ParseObject("ExampleObject");
+        /*ParseObject object = new ParseObject("ExampleObject");
         object.put("myNumber", "123");
         object.put("myString", "test");
 
-        /*object.saveInBackground(new SaveCallback() {
+        object.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException ex) {
                 if (ex == null) {
