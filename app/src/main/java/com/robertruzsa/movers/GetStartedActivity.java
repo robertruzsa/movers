@@ -7,25 +7,34 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.parse.LogInCallback;
+import com.parse.ParseAnonymousUtils;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
 public class GetStartedActivity extends AppCompatActivity {
 
     TextView clientTextView, moverTextView;
-    Switch mSwitch;
+    Switch userTypeSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_started);
 
+        anonymousLogin();
+
         clientTextView = findViewById(R.id.clientTextView);
         moverTextView = findViewById(R.id.moverTextView);
-        mSwitch = findViewById(R.id.mSwitch);
+        userTypeSwitch = findViewById(R.id.mSwitch);
 
         TextView instructionTextView = findViewById(R.id.instructionTextView);
         Instruction.show(instructionTextView, R.string.instruction_get_started);
@@ -34,7 +43,7 @@ public class GetStartedActivity extends AppCompatActivity {
         final int colorGray = ContextCompat.getColor(this, R.color.colorBlueInactive);
         final int colorBlueDark = ContextCompat.getColor(this, R.color.colorBlueDark);
 
-        mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        userTypeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("ResourceAsColor")
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -55,13 +64,52 @@ public class GetStartedActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        ImageView tvLogo = findViewById(R.id.logoImageView);
-        tvLogo.setVisibility(View.INVISIBLE);
+        ImageView logoImageView = findViewById(R.id.logoImageView);
+        logoImageView.setVisibility(View.INVISIBLE);
         super.onBackPressed();
     }
 
-    public void next(View view) {
-        Intent intent = new Intent(getApplicationContext(), GetPhoneNumberActivity.class);
-        startActivity(intent);
+    public void getStarted(View view) {
+        String userType = "client";
+        if (userTypeSwitch.isChecked())
+            userType = "mover";
+        ParseUser.getCurrentUser().put("userType", userType);
+
+        ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                redirectActivity();
+            }
+        });
+        Log.i("Info", "Redirecting as " + userType);
     }
+
+    public void anonymousLogin() {
+        if (ParseUser.getCurrentUser() == null) {
+            ParseAnonymousUtils.logIn(new LogInCallback() {
+                @Override
+                public void done(ParseUser user, ParseException e) {
+                    if (e == null)
+                        Log.i("Info", "Anonymous login successful");
+                    else
+                        Log.i("Info", "Anonymous login failed");
+                }
+            });
+        } else { // If we have a current user - they already set the user type
+            if (ParseUser.getCurrentUser().get("userType") != null) {
+                Log.i("Info", "Redirecting as " + ParseUser.getCurrentUser().get("userType"));
+                redirectActivity();
+            }
+        }
+    }
+
+    public void redirectActivity() {
+        if (ParseUser.getCurrentUser().get("userType").equals("client")) {
+            Intent intent = new Intent(getApplicationContext(), GetPhoneNumberActivity.class);
+            startActivity(intent);
+        } else {
+            // Start the MoverActivity
+        }
+    }
+
 }
