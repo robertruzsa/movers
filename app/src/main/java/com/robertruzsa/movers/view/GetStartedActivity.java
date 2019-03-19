@@ -30,7 +30,7 @@ public class GetStartedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_started);
 
-        // ParseUser.logOut();
+        //ParseUser.logOut();
 
         Authentication.Get(this).anonymousLogin();
 

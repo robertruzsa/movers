@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.parse.FunctionCallback;
@@ -14,7 +13,9 @@ import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.robertruzsa.movers.view.GetPhoneNumberActivity;
+import com.robertruzsa.movers.view.SignUpActivity;
 import com.robertruzsa.movers.view.VerificationActivity;
+import com.santalu.maskedittext.MaskEditText;
 
 import org.json.JSONObject;
 
@@ -82,7 +83,7 @@ public class Authentication {
 
                 } else {
                     Log.i("Response", "Exception: " + e);
-                    Toast.makeText(context, "A verifikációs kód elküldése során hiba történt. Próbálkozzon a kód újraküldésével.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "A verifikációs kód elküldése során hiba történt. Próbálkozzon újra.", Toast.LENGTH_LONG).show();
                     if (progressDialog != null)
                         progressDialog.dismiss();
                 }
@@ -90,7 +91,7 @@ public class Authentication {
         });
     }
 
-    public void verifyEnteredCode(String code, String phoneNumber) {
+    public void verifyEnteredCode(String code, String phoneNumber, final MaskEditText verificationCodeEditText) {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("phoneNumber", phoneNumber);
         params.put("phoneVerificationCode", code);
@@ -103,19 +104,21 @@ public class Authentication {
                         public void done(ParseUser parseUser, ParseException e) {
                             if (e == null) {
                                 Log.d("Response", "no exceptions! ");
-                                Toast.makeText(context, "No exceptions!", Toast.LENGTH_LONG).show();
-                                /*Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(i);
-                                finish();*/
+                                Toast.makeText(context, "Sikeres autentikcáió.", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(context, SignUpActivity.class);
+                                context.startActivity(intent);
                             } else {
                                 Log.d("Response", "Exception: " + e);
-                                //Toast.makeText(getApplicationContext(),"Something wrong.  Please try again." + e, Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "Az autentikcáió során hiba történt. Próbálkozzon újra." + e, Toast.LENGTH_LONG).show();
                             }
                         }
                     });
                 } else {
                     Log.d("Response", "Exception: " + response + e);
-                    //Toast.makeText(getApplicationContext(), "Something wrong. Please try again.", Toast.LENGTH_LONG).show();
+                    if (verificationCodeEditText != null)
+                        verificationCodeEditText.setError("Érvénytelen kód.");
+                    else
+                        Toast.makeText(context, "Érvénytelen kód.", Toast.LENGTH_LONG).show();
                 }
             }
         });

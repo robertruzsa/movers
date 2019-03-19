@@ -6,10 +6,14 @@
     <!--<color name="colorAccent">#D1294B</color>-->
     <color name="colorBlue">#72CAF0</color>
     <color name="colorBlueDark">#0C202B</color>
-    <color name="colorGray">#b6b7b5</color>
+    <color name="colorGray">#778899</color>
     <color name="colorBlueLight">#D7F2FD</color>
     <color name="colorBlueLighter">#4CB6E4</color>
     <color name="colorBlueInactive">#5799B8</color>
     <color name="colorToastBackground">#e2ebef</color>
     <color name="colorBlueLink">#0000EE</color>
+    <color name="colorBlueHint">#477D95</color>
+    <color name="colorBlueDarkInactive">#0d171c</color>
+    <color name="colorGreyInactive">#6c6f70</color>
+
 </resources>

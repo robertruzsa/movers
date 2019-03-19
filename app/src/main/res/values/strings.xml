@@ -10,8 +10,10 @@
     <string name="tovabb">Tovább</string>
     <string name="verifikacio">Verifikáció</string>
     <string name="instruction_verification_code">Adja meg az SMS-ben kapott verifikációs kódot.</string>
-    <string name="kod_ujrakuldese">Kód újreküldése</string>
+    <string name="kod_ujrakuldese">Kód újraküldése</string>
     <string name="verifikacios_kod">Verifikációs kód</string>
     <string name="telefonszam">Telefonszám</string>
     <string name="ervenytelen_telefonszam">Érvénytelen telefonszám.</string>
+    <string name="regisztracio">Regisztráció</string>
+    <string name="mentes">Mentés</string>
 </resources>

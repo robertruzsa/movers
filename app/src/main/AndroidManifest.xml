@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.PostVerificationActivity"></activity>
+        <activity android:name=".view.SignUpActivity"></activity>
         <activity android:name=".view.VerificationActivity" />
         <activity android:name=".view.GetPhoneNumberActivity" />
         <activity android:name=".view.GetStartedActivity" />

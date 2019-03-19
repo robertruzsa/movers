@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -27,6 +28,7 @@ public class GetPhoneNumberActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private MaskEditText phoneNumberEditText;
+    private Button requestCodeButton;
 
     Pattern pattern = Pattern.compile("^$|[0-9 ]+");
 
@@ -37,6 +39,9 @@ public class GetPhoneNumberActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_phone_number);
+
+        requestCodeButton = findViewById(R.id.requestCodeButton);
+        requestCodeButton.setEnabled(false);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -69,7 +74,6 @@ public class GetPhoneNumberActivity extends AppCompatActivity {
 
         phoneNumberEditText.addTextChangedListener(new TextWatcher() {
 
-
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -80,6 +84,13 @@ public class GetPhoneNumberActivity extends AppCompatActivity {
                 Log.i("char seq", String.valueOf(s));
                 if (!pattern.matcher(s).matches())
                     phoneNumberEditText.setError(getString(R.string.ervenytelen_telefonszam));
+
+
+                if (isValidPhoneNumber(phoneNumberEditText.getRawText()))
+                    requestCodeButton.setEnabled(true);
+                else
+                    requestCodeButton.setEnabled(false);
+
             }
 
             @Override
@@ -89,6 +100,7 @@ public class GetPhoneNumberActivity extends AppCompatActivity {
 
         phoneNumberEditText.setOnKeyListener(new View.OnKeyListener() {
             Pattern pattern = Pattern.compile("^$|[0-9 ]+");
+
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -100,7 +112,7 @@ public class GetPhoneNumberActivity extends AppCompatActivity {
         });
     }
 
-    public void next(View view) {
+    public void requestCode(View view) {
         if (isValidPhoneNumber(phoneNumberEditText.getRawText())) {
             String phoneNumber = COUNTRY_CALLING_CODE + phoneNumberEditText.getRawText();
             ProgressDialog progressDialog = ProgressDialog.show(this, "", "Kód elküldése folyamatban...", true);
@@ -111,8 +123,7 @@ public class GetPhoneNumberActivity extends AppCompatActivity {
     }
 
     public boolean isValidPhoneNumber(String phoneNumber) {
-        Log.i("phone number length", String.valueOf(phoneNumber.length()));
-        return pattern.matcher(phoneNumber).matches() && phoneNumber.length() == VALID_PHONE_NUMBER_LENGTH;
+        return phoneNumber.length() == VALID_PHONE_NUMBER_LENGTH && pattern.matcher(phoneNumber).matches();
     }
 
 }

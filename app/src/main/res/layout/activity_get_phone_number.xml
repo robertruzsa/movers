@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:background="@color/colorBlue"
+            android:background="@android:color/transparent"
             android:hint="20 123 4567"
             android:inputType="phone"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -62,19 +62,18 @@
         app:layout_constraintTop_toBottomOf="@+id/phoneNumberConstraintLayout" />
 
     <Button
-        android:id="@+id/nextButton"
+        android:id="@+id/requestCodeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_button"
-        android:onClick="next"
+        android:onClick="requestCode"
         android:text="@string/tovabb"
-        android:textColor="@android:color/white"
+        android:textColor="@drawable/button_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/instructionPhoneNumberTextView" />
-
 
 </android.support.constraint.ConstraintLayout>
