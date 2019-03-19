@@ -28,7 +28,10 @@ public class GetPhoneNumberActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private MaskEditText phoneNumberEditText;
 
+    Pattern pattern = Pattern.compile("^$|[0-9 ]+");
+
     static final String COUNTRY_CALLING_CODE = "+36";
+    static final int VALID_PHONE_NUMBER_LENGTH = 9;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +68,7 @@ public class GetPhoneNumberActivity extends AppCompatActivity {
         }, 1000);
 
         phoneNumberEditText.addTextChangedListener(new TextWatcher() {
-            Pattern pattern = Pattern.compile("^$|[0-9 ]+");
+
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -83,11 +86,33 @@ public class GetPhoneNumberActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
+
+        phoneNumberEditText.setOnKeyListener(new View.OnKeyListener() {
+            Pattern pattern = Pattern.compile("^$|[0-9 ]+");
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (!isValidPhoneNumber(phoneNumberEditText.getRawText()))
+                        phoneNumberEditText.setError(getString(R.string.ervenytelen_telefonszam));
+                }
+                return false;
+            }
+        });
     }
 
     public void next(View view) {
-        String phoneNumber = COUNTRY_CALLING_CODE + phoneNumberEditText.getRawText();
-        ProgressDialog progressDialog = ProgressDialog.show(this, "", "Kód elküldése folyamatban...", true);
-        Authentication.Get(getApplicationContext()).requestPhoneVerification(phoneNumber, progressDialog);
+        if (isValidPhoneNumber(phoneNumberEditText.getRawText())) {
+            String phoneNumber = COUNTRY_CALLING_CODE + phoneNumberEditText.getRawText();
+            ProgressDialog progressDialog = ProgressDialog.show(this, "", "Kód elküldése folyamatban...", true);
+            Authentication.Get(getApplicationContext()).requestPhoneVerification(phoneNumber, progressDialog);
+        } else {
+            phoneNumberEditText.setError(getString(R.string.ervenytelen_telefonszam));
+        }
     }
+
+    public boolean isValidPhoneNumber(String phoneNumber) {
+        Log.i("phone number length", String.valueOf(phoneNumber.length()));
+        return pattern.matcher(phoneNumber).matches() && phoneNumber.length() == VALID_PHONE_NUMBER_LENGTH;
+    }
+
 }

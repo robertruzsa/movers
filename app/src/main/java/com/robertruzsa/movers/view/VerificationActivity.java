@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -54,13 +55,13 @@ public class VerificationActivity extends AppCompatActivity implements View.OnKe
 
         codeEditText = findViewById(R.id.verificationCodeEditText);
 
-        codeEditText.postDelayed(new Runnable() {
+        /*codeEditText.postDelayed(new Runnable() {
             @Override
             public void run() {
                 InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 keyboard.showSoftInput(codeEditText, 0);
             }
-        },1000);
+        }, 1000);*/
     }
 
     public void next(View view) {
@@ -74,8 +75,8 @@ public class VerificationActivity extends AppCompatActivity implements View.OnKe
 
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
-
+        if (keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER/* && event.getAction() == KeyEvent.ACTION_DOWN*/) {
+            Log.i("Keycode", "Enter pressed");
         }
         return false;
     }
