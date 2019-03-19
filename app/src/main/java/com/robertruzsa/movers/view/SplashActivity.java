@@ -1,4 +1,4 @@
-package com.robertruzsa.movers;
+package com.robertruzsa.movers.view;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.parse.ParseAnalytics;
+import com.robertruzsa.movers.R;
 
 public class SplashActivity extends AppCompatActivity {
 

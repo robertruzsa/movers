@@ -11,4 +11,5 @@
     <color name="colorBlueLighter">#4CB6E4</color>
     <color name="colorBlueInactive">#5799B8</color>
     <color name="colorToastBackground">#e2ebef</color>
+    <color name="colorBlueLink">#0000EE</color>
 </resources>

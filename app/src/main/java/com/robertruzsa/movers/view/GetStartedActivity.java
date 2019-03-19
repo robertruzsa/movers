@@ -1,7 +1,6 @@
-package com.robertruzsa.movers;
+package com.robertruzsa.movers.view;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
@@ -14,11 +13,12 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.parse.LogInCallback;
-import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.robertruzsa.movers.auth.Authentication;
+import com.robertruzsa.movers.R;
+import com.robertruzsa.movers.helper.Instruction;
 
 public class GetStartedActivity extends AppCompatActivity {
 
@@ -30,13 +30,15 @@ public class GetStartedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_started);
 
-        anonymousLogin();
+        // ParseUser.logOut();
+
+        Authentication.Get(this).anonymousLogin();
 
         clientTextView = findViewById(R.id.clientTextView);
         moverTextView = findViewById(R.id.moverTextView);
         userTypeSwitch = findViewById(R.id.mSwitch);
 
-        TextView instructionTextView = findViewById(R.id.instructionTextView);
+        TextView instructionTextView = findViewById(R.id.instructionGetStartedTextView);
         Instruction.show(instructionTextView, R.string.instruction_get_started);
 
         final Typeface font = ResourcesCompat.getFont(this, R.font.open_sans);
@@ -74,42 +76,12 @@ public class GetStartedActivity extends AppCompatActivity {
         if (userTypeSwitch.isChecked())
             userType = "mover";
         ParseUser.getCurrentUser().put("userType", userType);
-
         ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                redirectActivity();
+                Authentication.Get(getApplicationContext()).redirectActivity();
             }
         });
         Log.i("Info", "Redirecting as " + userType);
     }
-
-    public void anonymousLogin() {
-        if (ParseUser.getCurrentUser() == null) {
-            ParseAnonymousUtils.logIn(new LogInCallback() {
-                @Override
-                public void done(ParseUser user, ParseException e) {
-                    if (e == null)
-                        Log.i("Info", "Anonymous login successful");
-                    else
-                        Log.i("Info", "Anonymous login failed");
-                }
-            });
-        } else { // If we have a current user - they already set the user type
-            if (ParseUser.getCurrentUser().get("userType") != null) {
-                Log.i("Info", "Redirecting as " + ParseUser.getCurrentUser().get("userType"));
-                redirectActivity();
-            }
-        }
-    }
-
-    public void redirectActivity() {
-        if (ParseUser.getCurrentUser().get("userType").equals("client")) {
-            Intent intent = new Intent(getApplicationContext(), GetPhoneNumberActivity.class);
-            startActivity(intent);
-        } else {
-            // Start the MoverActivity
-        }
-    }
-
 }

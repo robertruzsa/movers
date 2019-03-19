@@ -8,4 +8,10 @@
     <string name="instruction_get_started">Költözkődő vagy Költöztető módban\nszeretné használni az alkalmazást?</string>
     <string name="instruction_phone_number">Adja meg telefonszámát,\nhogy felvehessük Önnel a kapcsolatot.</string>
     <string name="tovabb">Tovább</string>
+    <string name="verifikacio">Verifikáció</string>
+    <string name="instruction_verification_code">Adja meg az SMS-ben kapott verifikációs kódot.</string>
+    <string name="kod_ujrakuldese">Kód újreküldése</string>
+    <string name="verifikacios_kod">Verifikációs kód</string>
+    <string name="telefonszam">Telefonszám</string>
+    <string name="ervenytelen_telefonszam">Érvénytelen telefonszám.</string>
 </resources>

@@ -4,51 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.GetPhoneNumberActivity">
+    tools:context=".view.VerificationActivity">
 
     <include
         android:id="@+id/toolbar"
         layout="@layout/app_bar" />
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/phoneNumberConstraintLayout"
+    <com.santalu.maskedittext.MaskEditText
+        android:id="@+id/verificationCodeEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/input_background"
+        android:hint="@string/verifikacios_kod"
+        android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
-
-        <TextView
-            android:id="@+id/countryCallingCodeTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+36"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.santalu.maskedittext.MaskEditText
-            android:id="@+id/phoneNumberEditText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:background="@color/colorBlue"
-            android:hint="20 123 4567"
-            android:inputType="phone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/countryCallingCodeTextView"
-            app:layout_constraintTop_toTopOf="parent"
-            app:met_mask="## ### ####" />
-
-    </android.support.constraint.ConstraintLayout>
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:met_mask="######" />
 
     <TextView
-        android:id="@+id/instructionPhoneNumberTextView"
+        android:id="@+id/instructionVerificationTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -59,7 +37,7 @@
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phoneNumberConstraintLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/verificationCodeEditText" />
 
     <Button
         android:id="@+id/nextButton"
@@ -73,8 +51,22 @@
         android:text="@string/tovabb"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/instructionPhoneNumberTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
+    <TextView
+        android:id="@+id/textView2"
+        android:onClick="resendCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/kod_ujrakuldese"
+        android:textColor="@color/colorBlueLink"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/instructionVerificationTextView" />
 
 </android.support.constraint.ConstraintLayout>

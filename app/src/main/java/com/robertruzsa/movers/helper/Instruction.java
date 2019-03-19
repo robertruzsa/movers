@@ -1,10 +1,10 @@
-package com.robertruzsa.movers;
+package com.robertruzsa.movers.helper;
 
 import android.os.Handler;
 import android.widget.TextView;
 
 public class Instruction {
-    static void show(final TextView textView, int stringResourceId) {
+    public static void show(final TextView textView, int stringResourceId) {
         textView.setText(stringResourceId);
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
