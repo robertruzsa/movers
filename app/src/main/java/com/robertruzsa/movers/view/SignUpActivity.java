@@ -1,5 +1,6 @@
 package com.robertruzsa.movers.view;
 
+import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -145,6 +146,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 @Override
                 public void done(ParseException e) {
                     Log.i("User data", "Save successful");
+                    Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                    startActivity(intent);
                 }
             });
         }

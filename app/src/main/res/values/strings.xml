@@ -17,4 +17,5 @@
     <string name="regisztracio">Regisztráció</string>
     <string name="mentes">Mentés</string>
     <string name="ervenytelen_email_cim">Érvénytelen email cím.</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
