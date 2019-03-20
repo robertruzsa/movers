@@ -34,6 +34,7 @@
         android:layout_marginEnd="8dp"
         android:alpha="0"
         android:background="@drawable/instruction_background"
+        android:elevation="4dp"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,12 +57,12 @@
 
     <TextView
         android:id="@+id/resendCodeTextView"
-        android:onClick="resendCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:onClick="resendCode"
         android:text="@string/kod_ujrakuldese"
         android:textColor="@color/colorBlueLink"
         app:layout_constraintEnd_toEndOf="parent"

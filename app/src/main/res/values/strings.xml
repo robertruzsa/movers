@@ -16,4 +16,5 @@
     <string name="ervenytelen_telefonszam">Érvénytelen telefonszám.</string>
     <string name="regisztracio">Regisztráció</string>
     <string name="mentes">Mentés</string>
+    <string name="ervenytelen_email_cim">Érvénytelen email cím.</string>
 </resources>

@@ -8,13 +8,19 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.robertruzsa.movers.R;
 
-public class SignUpActivity extends AppCompatActivity {
+import java.util.regex.Pattern;
+
+public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Toolbar toolbar;
 
@@ -26,11 +32,11 @@ public class SignUpActivity extends AppCompatActivity {
     TextView lastNameTextView;
     TextView firstNameTextView;
     TextView emailTextView;
+    TextView phoneNumberEditText;
 
     EditText lastNameEditText;
     EditText firstNameEditText;
     EditText emailEditText;
-    TextView phoneNumberEditText;
 
     Button saveUserDataButton;
 
@@ -38,10 +44,17 @@ public class SignUpActivity extends AppCompatActivity {
 
     private TextWatcher textWatcher;
 
+    Pattern pattern = Pattern.compile("^$|^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$");
+
+    ConstraintLayout signUpConstraintLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        signUpConstraintLayout = findViewById(R.id.signUpConstraintLayout);
+        signUpConstraintLayout.setOnClickListener(this);
 
         saveUserDataButton = findViewById(R.id.saveUserDataButton);
         saveUserDataButton.setEnabled(false);
@@ -80,7 +93,6 @@ public class SignUpActivity extends AppCompatActivity {
         phoneNumberEditText = (TextView) phoneNumberConstraintLayout.getChildAt(1);
         phoneNumber = getIntent().getStringExtra("phoneNumber");
         phoneNumberEditText.setText(phoneNumber);
-        //phoneNumberEditText.setEnabled(false);
 
         textWatcher = new TextWatcher() {
             @Override
@@ -101,7 +113,7 @@ public class SignUpActivity extends AppCompatActivity {
                 if (emailEditText.getText().toString().equals(""))
                     emailTextView.setVisibility(View.GONE);
 
-                if (!lastNameEditText.getText().toString().equals("") && !firstNameTextView.getText().toString().equals(""))
+                if (!lastNameEditText.getText().toString().equals("") && !firstNameEditText.getText().toString().equals(""))
                     saveUserDataButton.setEnabled(true);
                 else
                     saveUserDataButton.setEnabled(false);
@@ -120,5 +132,31 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void saveUserData(View view) {
+        if (!isEmailValid()) {
+            emailEditText.setError(getString(R.string.ervenytelen_email_cim));
+            return;
+        } else {
+            ParseUser.getCurrentUser().put("lastName", lastNameEditText.getText().toString());
+            ParseUser.getCurrentUser().put("firstName", firstNameEditText.getText().toString());
+            if (!emailEditText.equals(""))
+                ParseUser.getCurrentUser().setEmail(emailEditText.getText().toString());
+
+            ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    Log.i("User data", "Save successful");
+                }
+            });
+        }
+    }
+
+    public boolean isEmailValid() {
+        return pattern.matcher(emailEditText.getText().toString()).matches();
+    }
+
+    @Override
+    public void onClick(View v) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
     }
 }
