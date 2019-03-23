@@ -25,11 +25,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     private Toolbar toolbar;
 
-    ConstraintLayout lastNameConstraintLayout;
-    ConstraintLayout firstNameConstraintLayout;
-    ConstraintLayout emailConstraintLayout;
-    ConstraintLayout phoneNumberConstraintLayout;
-
     TextView lastNameTextView;
     TextView firstNameTextView;
     TextView emailTextView;
@@ -58,7 +53,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         signUpConstraintLayout.setOnClickListener(this);
 
         saveUserDataButton = findViewById(R.id.saveUserDataButton);
-        saveUserDataButton.setEnabled(false);
+        //saveUserDataButton.setEnabled(false);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -77,21 +72,16 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        lastNameConstraintLayout = findViewById(R.id.lastNameConstraintLayout);
-        firstNameConstraintLayout = findViewById(R.id.firstNameConstraintLayout);
-        emailConstraintLayout = findViewById(R.id.emailConstraintLayout);
-        phoneNumberConstraintLayout = findViewById(R.id.phoneNumberConstraintLayout);
+        lastNameTextView = findViewById(R.id.lastNameTextView);
+        lastNameEditText = findViewById(R.id.lastNameEditText);
 
-        lastNameTextView = (TextView) lastNameConstraintLayout.getChildAt(0);
-        lastNameEditText = (EditText) lastNameConstraintLayout.getChildAt(1);
+        firstNameTextView = findViewById(R.id.firstNameTextView);
+        firstNameEditText = findViewById(R.id.firstNameEditText);
 
-        firstNameTextView = (TextView) firstNameConstraintLayout.getChildAt(0);
-        firstNameEditText = (EditText) firstNameConstraintLayout.getChildAt(1);
+        emailTextView = findViewById(R.id.emailTextView);
+        emailEditText = findViewById(R.id.emailEditText);
 
-        emailTextView = (TextView) emailConstraintLayout.getChildAt(0);
-        emailEditText = (EditText) emailConstraintLayout.getChildAt(1);
-
-        phoneNumberEditText = (TextView) phoneNumberConstraintLayout.getChildAt(1);
+        phoneNumberEditText = findViewById(R.id.phoneNumberEditText);
         phoneNumber = getIntent().getStringExtra("phoneNumber");
         phoneNumberEditText.setText(phoneNumber);
 
@@ -133,7 +123,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void saveUserData(View view) {
-        if (!isEmailValid()) {
+        /*if (!isEmailValid()) {
             emailEditText.setError(getString(R.string.ervenytelen_email_cim));
             return;
         } else {
@@ -150,7 +140,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     startActivity(intent);
                 }
             });
-        }
+        }*/
+        Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+        startActivity(intent);
     }
 
     public boolean isEmailValid() {
