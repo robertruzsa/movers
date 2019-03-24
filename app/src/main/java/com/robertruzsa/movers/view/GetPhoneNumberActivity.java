@@ -1,32 +1,24 @@
 package com.robertruzsa.movers.view;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.KeyEvent;
+import androidx.appcompat.widget.Toolbar;
+
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.robertruzsa.movers.auth.Authentication;
 import com.robertruzsa.movers.R;
-import com.robertruzsa.movers.helper.Instruction;
 import com.santalu.maskedittext.MaskEditText;
 
 import java.util.regex.Pattern;
 
 public class GetPhoneNumberActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
+    private ActionBar toolbar;
     private MaskEditText phoneNumberEditText;
     private Button requestCodeButton;
 
@@ -40,10 +32,12 @@ public class GetPhoneNumberActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_phone_number);
 
-        requestCodeButton = findViewById(R.id.requestCodeButton);
-        requestCodeButton.setEnabled(false);
+        toolbar = getActionBar();
 
-        toolbar = findViewById(R.id.toolbar);
+       /* requestCodeButton = findViewById(R.id.requestCodeButton);
+        requestCodeButton.setEnabled(false);*/
+
+        /*toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -53,7 +47,7 @@ public class GetPhoneNumberActivity extends AppCompatActivity {
             }
         });
 
-        TextView titleTextView = (TextView) toolbar.getChildAt(0);
+        /*TextView titleTextView = (TextView) toolbar.getChildAt(0);
         titleTextView.setText(getString(R.string.telefonszam));
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -109,7 +103,7 @@ public class GetPhoneNumberActivity extends AppCompatActivity {
                 }
                 return false;
             }
-        });
+        });*/
     }
 
     public void requestCode(View view) {
@@ -126,4 +120,7 @@ public class GetPhoneNumberActivity extends AppCompatActivity {
         return phoneNumber.length() == VALID_PHONE_NUMBER_LENGTH && pattern.matcher(phoneNumber).matches();
     }
 
+    public void onClick(View view) {
+        this.onRestart();
+    }
 }
