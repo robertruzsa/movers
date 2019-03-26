@@ -37,6 +37,8 @@
     <string name="no">Nem</string>
     <string name="step_four">4. lépés</string>
     <string name="instruction_locations">Adja meg, honnan hová szeretne költözködni.</string>
+    <string name="sending_code">Kód elküldése folyamatban...</string>
+    <string name="contact">Elérhetőség</string>
 
     <integer-array name="img_id_arr">
         <item>1</item>

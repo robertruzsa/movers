@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.rd.PageIndicatorView;
 import com.robertruzsa.movers.auth.Authentication;
 import com.robertruzsa.movers.R;
 import com.robertruzsa.movers.helper.Instruction;
@@ -30,7 +31,11 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     private TextInputLayout verificationCodeTextInputLayout;
     private TextInputEditText verificationCodeEditText;
     private String phoneNumber;
-    private ConstraintLayout verificationConstraintLayout;
+
+
+    //private ConstraintLayout verificationConstraintLayout;
+
+    private PageIndicatorView pageIndicatorView;
 
     private static final int VERIFICATION_CODE_LENGTH = 6;
 
@@ -44,7 +49,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         verificationCodeTextInputLayout = findViewById(R.id.verificationCodeTextInputLayout);
 
         verificationCodeEditText = (TextInputEditText) verificationCodeTextInputLayout.getEditText();
-        verificationCodeEditText.postDelayed(new Runnable() {
+        /*verificationCodeEditText.postDelayed(new Runnable() {
             @Override
             public void run() {
                 InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -53,9 +58,14 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         }, 1000);
 
         verificationConstraintLayout = findViewById(R.id.verificationConstraintLayout);
-        verificationConstraintLayout.setOnClickListener(this);
+        verificationConstraintLayout.setOnClickListener(this);*/
 
         verificationCodeEditText.setText("111111"); // TODO: remove this line
+
+        TextView headerTextView = findViewById(R.id.headerTextView);
+        int step = Integer.valueOf(headerTextView.getText().toString().substring(0, 1));
+        pageIndicatorView = findViewById(R.id.pageIndicatorView);
+        pageIndicatorView.setProgress(step - 1, 1);
     }
 
     public void verifyCode(View view) {

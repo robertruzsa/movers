@@ -7,6 +7,9 @@
     android:layout_height="match_parent"
     tools:context=".view.GetPhoneNumberActivity">
 
+   <!-- <include
+        layout="@layout/bottom_navigation_bar" />-->
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -69,6 +72,7 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomNavBarConstraintLayout"
         android:layout_width="match_parent"
@@ -78,6 +82,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/backButton"
@@ -96,18 +101,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.chabbal.slidingdotsplash.SlidingSplashView
-            android:id="@+id/slidingSplashView"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            app:imageResources="@array/img_id_arr"
+        <com.rd.PageIndicatorView
+            app:piv_count="6"
+            android:id="@+id/pageIndicatorView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/requestCodeButton"
+            app:layout_constraintEnd_toStartOf="@id/requestCodeButton"
             app:layout_constraintStart_toEndOf="@+id/backButton"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:piv_interactiveAnimation="true"
+            app:piv_animationType="scale"
+            app:piv_selectedColor="@color/colorPrimary"
+            app:piv_unselectedColor="@color/places_ui_default_primary_dark" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/requestCodeButton"

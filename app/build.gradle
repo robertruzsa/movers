@@ -47,4 +47,5 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     implementation 'com.chabbal:slidingdotsplash:1.0.2'
     implementation 'com.google.android.material:material:1.1.0-alpha02'
+    implementation 'com.romandanylyk:pageindicatorview:1.0.3'
 }

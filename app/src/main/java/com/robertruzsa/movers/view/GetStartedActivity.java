@@ -1,6 +1,7 @@
 package com.robertruzsa.movers.view;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Typeface;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
@@ -28,7 +29,7 @@ public class GetStartedActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_get_started);
+        super.setContentView(R.layout.activity_get_started);
 
         //ParseUser.logOut();
         Authentication.Get(this).anonymousLogin();
@@ -49,5 +50,6 @@ public class GetStartedActivity extends AppCompatActivity {
             }
         });
         Log.i("Info", "Redirecting as " + userType);
+
     }
 }
