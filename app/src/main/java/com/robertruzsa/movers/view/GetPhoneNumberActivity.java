@@ -1,63 +1,44 @@
 package com.robertruzsa.movers.view;
 
-import android.app.ActionBar;
 import android.app.ProgressDialog;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.viewpager.widget.ViewPager;
+
+import android.content.Context;
 import android.os.Bundle;
-import androidx.appcompat.widget.Toolbar;
 
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.View;
-import android.widget.Button;
+import android.view.inputmethod.InputMethodManager;
 
+import com.chabbal.slidingdotsplash.SlidingSplashView;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.robertruzsa.movers.auth.Authentication;
 import com.robertruzsa.movers.R;
-import com.santalu.maskedittext.MaskEditText;
 
 import java.util.regex.Pattern;
 
-public class GetPhoneNumberActivity extends AppCompatActivity {
+public class GetPhoneNumberActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ActionBar toolbar;
-    private MaskEditText phoneNumberEditText;
-    private Button requestCodeButton;
+    Pattern pattern = Pattern.compile("^[+]?[0-9]{10,13}$");
 
-    Pattern pattern = Pattern.compile("^$|[0-9 ]+");
-
-    static final String COUNTRY_CALLING_CODE = "+36";
-    static final int VALID_PHONE_NUMBER_LENGTH = 9;
+    private TextInputLayout phoneNumberTextInputLayout;
+    private TextInputEditText phoneNumberEditText;
+    private ConstraintLayout getPhoneNumberConstraintLayout;
+    private SlidingSplashView slidingSplashView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_phone_number);
 
-        toolbar = getActionBar();
+        phoneNumberTextInputLayout = findViewById(R.id.phoneNumberTextInputLayout);
 
-       /* requestCodeButton = findViewById(R.id.requestCodeButton);
-        requestCodeButton.setEnabled(false);*/
-
-        /*toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        /*TextView titleTextView = (TextView) toolbar.getChildAt(0);
-        titleTextView.setText(getString(R.string.telefonszam));
-
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        TextView instructionTextView = findViewById(R.id.instructionPhoneNumberTextView);
-        Instruction.show(instructionTextView, R.string.instruction_phone_number);
-
-        phoneNumberEditText = findViewById(R.id.phoneNumberEditText);
+        phoneNumberEditText = (TextInputEditText) phoneNumberTextInputLayout.getEditText();
+        phoneNumberEditText.addTextChangedListener(new PhoneNumberFormattingTextWatcher("HU"));
         phoneNumberEditText.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -66,61 +47,54 @@ public class GetPhoneNumberActivity extends AppCompatActivity {
             }
         }, 1000);
 
-        phoneNumberEditText.addTextChangedListener(new TextWatcher() {
+        getPhoneNumberConstraintLayout = findViewById(R.id.getPhoneNumberConstraintLayout);
+        getPhoneNumberConstraintLayout.setOnClickListener(this);
 
+        phoneNumberEditText.setText("+36201234567"); // TODO: Remove this line
+        slidingSplashView = findViewById(R.id.slidingSplashView);
+        slidingSplashView.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                Log.i("char seq", String.valueOf(s));
-                if (!pattern.matcher(s).matches())
-                    phoneNumberEditText.setError(getString(R.string.ervenytelen_telefonszam));
-
-
-                if (isValidPhoneNumber(phoneNumberEditText.getRawText()))
-                    requestCodeButton.setEnabled(true);
-                else
-                    requestCodeButton.setEnabled(false);
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
-
-        phoneNumberEditText.setOnKeyListener(new View.OnKeyListener() {
-            Pattern pattern = Pattern.compile("^$|[0-9 ]+");
-
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
-                    if (!isValidPhoneNumber(phoneNumberEditText.getRawText()))
-                        phoneNumberEditText.setError(getString(R.string.ervenytelen_telefonszam));
-                }
-                return false;
-            }
-        });*/
     }
 
-    public void requestCode(View view) {
-        if (isValidPhoneNumber(phoneNumberEditText.getRawText())) {
-            String phoneNumber = COUNTRY_CALLING_CODE + phoneNumberEditText.getRawText();
-            ProgressDialog progressDialog = ProgressDialog.show(this, "", "Kód elküldése folyamatban...", true);
-            Authentication.Get(getApplicationContext()).requestPhoneVerification(phoneNumber, progressDialog);
+    public boolean validatePhoneNumber(String phoneNumber) {
+        if (!pattern.matcher(phoneNumber).matches()) {
+            phoneNumberTextInputLayout.setError(getString(R.string.invalid_phone_number));
+            return false;
         } else {
-            phoneNumberEditText.setError(getString(R.string.ervenytelen_telefonszam));
+            phoneNumberTextInputLayout.setError(null);
+            return true;
         }
     }
 
-    public boolean isValidPhoneNumber(String phoneNumber) {
-        return phoneNumber.length() == VALID_PHONE_NUMBER_LENGTH && pattern.matcher(phoneNumber).matches();
+    public void requestCode(View view) {
+        String phoneNumber = phoneNumberEditText.getText().toString().replace(" ","");
+        if (validatePhoneNumber(phoneNumber)) {
+            ProgressDialog progressDialog = ProgressDialog.show(this, "", "Kód elküldése folyamatban...", true);
+            Authentication.Get(getApplicationContext()).requestPhoneVerification(phoneNumber, progressDialog);
+        }
     }
 
-    public void onClick(View view) {
-        this.onRestart();
+    public void back(View view) {
+        onBackPressed();
+    }
+
+    @Override
+    public void onClick(View v) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
     }
 }

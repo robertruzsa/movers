@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.parse.FunctionCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseAnonymousUtils;
@@ -91,7 +93,7 @@ public class Authentication {
         });
     }
 
-    public void verifyEnteredCode(String code, String phoneNumber, final MaskEditText verificationCodeEditText) {
+    public void verifyEnteredCode(String code, String phoneNumber, final TextInputLayout verificationCodeTextInputLayout) {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("phoneNumber", phoneNumber);
         params.put("phoneVerificationCode", code);
@@ -115,8 +117,8 @@ public class Authentication {
                     });
                 } else {
                     Log.d("Response", "Exception: " + response + e);
-                    if (verificationCodeEditText != null)
-                        verificationCodeEditText.setError("Érvénytelen kód.");
+                    if (verificationCodeTextInputLayout != null)
+                        verificationCodeTextInputLayout.setError("Érvénytelen kód.");
                     else
                         Toast.makeText(context, "Érvénytelen kód.", Toast.LENGTH_LONG).show();
                 }

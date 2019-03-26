@@ -3,9 +3,14 @@ package com.robertruzsa.movers.view;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
+
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -13,52 +18,32 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.robertruzsa.movers.auth.Authentication;
 import com.robertruzsa.movers.R;
 import com.robertruzsa.movers.helper.Instruction;
 import com.santalu.maskedittext.MaskEditText;
 
-public class VerificationActivity extends AppCompatActivity {
+public class VerificationActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Toolbar toolbar;
-    private MaskEditText verificationCodeEditText;
+    private TextInputLayout verificationCodeTextInputLayout;
+    private TextInputEditText verificationCodeEditText;
     private String phoneNumber;
+    private ConstraintLayout verificationConstraintLayout;
 
-    private ProgressDialog progressDialog = null;
-    private Button verifyCodeButton;
+    private static final int VERIFICATION_CODE_LENGTH = 6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verification);
 
-        verifyCodeButton = findViewById(R.id.verifyCodeButton);
-        verifyCodeButton.setEnabled(false);
-
         phoneNumber = getIntent().getStringExtra("phoneNumber");
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        verificationCodeTextInputLayout = findViewById(R.id.verificationCodeTextInputLayout);
 
-        TextView titleTextView = (TextView) toolbar.getChildAt(0);
-        titleTextView.setText(getString(R.string.verifikacio));
-
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        TextView instructionTextView = findViewById(R.id.instructionVerificationTextView);
-        Instruction.show(instructionTextView, R.string.instruction_verification_code);
-
-        verificationCodeEditText = findViewById(R.id.verificationCodeEditText);
-
+        verificationCodeEditText = (TextInputEditText) verificationCodeTextInputLayout.getEditText();
         verificationCodeEditText.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -67,37 +52,35 @@ public class VerificationActivity extends AppCompatActivity {
             }
         }, 1000);
 
-        verificationCodeEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        verificationConstraintLayout = findViewById(R.id.verificationConstraintLayout);
+        verificationConstraintLayout.setOnClickListener(this);
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() != 6)
-                    verifyCodeButton.setEnabled(false);
-                else
-                    verifyCodeButton.setEnabled(true);
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+        verificationCodeEditText.setText("111111"); // TODO: remove this line
     }
 
     public void verifyCode(View view) {
-        String verificationCode = verificationCodeEditText.getRawText();
-        //Authentication.Get(getApplicationContext()).verifyEnteredCode(verificationCode, phoneNumber, verificationCodeEditText);
-        Intent intent = new Intent(this, SignUpActivity.class);
-        intent.putExtra("phoneNumber", phoneNumber);
-        startActivity(intent);
+        String verificationCode = verificationCodeEditText.getText().toString().trim();
+        if (verificationCode.length() != VERIFICATION_CODE_LENGTH)
+            verificationCodeTextInputLayout.setError(getString(R.string.invalid_verification_code));
+        else {
+            //Authentication.Get(getApplicationContext()).verifyEnteredCode(verificationCode, phoneNumber, verificationCodeTextInputLayout);
+            Intent intent = new Intent(this, SignUpActivity.class);
+            intent.putExtra("phoneNumber", phoneNumber);
+            startActivity(intent);
+        }
     }
 
     public void resendCode(View view) {
         Authentication.Get(getApplicationContext()).requestPhoneVerification(phoneNumber, null);
+    }
+
+    @Override
+    public void onClick(View v) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+    }
+
+    public void back(View view) {
+        onBackPressed();
     }
 }

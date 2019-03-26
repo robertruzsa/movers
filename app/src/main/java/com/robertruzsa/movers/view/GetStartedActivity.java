@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -22,8 +23,7 @@ import com.robertruzsa.movers.helper.Instruction;
 
 public class GetStartedActivity extends AppCompatActivity {
 
-    TextView clientTextView, moverTextView;
-    Switch userTypeSwitch;
+    RadioButton clientRadioButton, moverRadioButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,49 +31,15 @@ public class GetStartedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_get_started);
 
         //ParseUser.logOut();
-
         Authentication.Get(this).anonymousLogin();
 
-        clientTextView = findViewById(R.id.clientTextView);
-        moverTextView = findViewById(R.id.moverTextView);
-        userTypeSwitch = findViewById(R.id.mSwitch);
-
-        TextView instructionTextView = findViewById(R.id.instructionGetStartedTextView);
-        Instruction.show(instructionTextView, R.string.instruction_get_started);
-
-        final Typeface font = ResourcesCompat.getFont(this, R.font.open_sans);
-        final int colorGray = ContextCompat.getColor(this, R.color.colorBlueInactive);
-        final int colorBlueDark = ContextCompat.getColor(this, R.color.colorBlueDark);
-
-        userTypeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @SuppressLint("ResourceAsColor")
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    moverTextView.setTypeface(font, Typeface.BOLD);
-                    moverTextView.setTextColor(colorBlueDark);
-                    clientTextView.setTypeface(font, Typeface.NORMAL);
-                    clientTextView.setTextColor(colorGray);
-                } else {
-                    clientTextView.setTypeface(font, Typeface.BOLD);
-                    clientTextView.setTextColor(colorBlueDark);
-                    moverTextView.setTypeface(font, Typeface.NORMAL);
-                    moverTextView.setTextColor(colorGray);
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onBackPressed() {
-        ImageView logoImageView = findViewById(R.id.logoImageView);
-        logoImageView.setVisibility(View.INVISIBLE);
-        super.onBackPressed();
+        clientRadioButton = findViewById(R.id.clientRadioButton);
+        moverRadioButton = findViewById(R.id.moverRadioButton);
     }
 
     public void getStarted(View view) {
         String userType = "client";
-        if (userTypeSwitch.isChecked())
+        if (moverRadioButton.isChecked())
             userType = "mover";
         ParseUser.getCurrentUser().put("userType", userType);
         ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {

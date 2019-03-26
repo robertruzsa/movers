@@ -1,6 +1,7 @@
 package com.robertruzsa.movers.view;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -17,15 +18,19 @@ import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+
 import android.os.Bundle;
+
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -50,6 +55,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.PendingResult;
@@ -69,34 +75,28 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private GoogleMap mMap;
 
-    private Toolbar toolbar;
-
     LocationManager locationManager;
     LocationListener locationListener;
 
     private static final float DEFAULT_ZOOM = 15;
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(-40, -168), new LatLng(71, 136));
-
-    private static final int PADDING = 23;
     private static final float TEXT_SIZE = 18f;
     private static final String LOC_A_TAG = "locA";
     private static final String LOC_B_TAG = "locB";
 
-    private PlacesClient placesClient;
-    AutocompleteSupportFragment locAAutocompleteFragment;
-    AutocompleteSupportFragment locBAutocompleteFragment;
-
+    private AutocompleteSupportFragment locAAutocompleteFragment, locBAutocompleteFragment;
     private GeoApiContext geoApiContext = null;
-    private LatLng userLocation;
-    private LatLng pickupLocation;
-    private LatLng dropoffLocation;
-    private ImageView locAImageView;
-    private ImageView locBImageView;
-    private EditText locAEditText;
-    private EditText locBEditText;
+    private LatLng userLocation, pickupLocation, dropoffLocation;
+    private ImageView locAImageView, locBImageView;
+    private EditText locAEditText, locBEditText;
+    private TextView headerTextView, instructionTextView;
 
     private List<Marker> markers = new ArrayList<>();
     private List<Polyline> polylines = new ArrayList<>();
+
+    private static final int MAP_LAYOUT_STATE_CONTRACTED = 0;
+    private static final int MAP_LAYOUT_STATE_EXPANDED = 1;
+    private int mMapLayoutState = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,30 +105,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        if (geoApiContext == null) {
-            geoApiContext = new GeoApiContext.Builder()
-                    .apiKey(getString(R.string.google_maps_key))
-                    .build();
-        }
+        initPlacesApi();
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        TextView titleTextView = (TextView) toolbar.getChildAt(0);
-        titleTextView.setText(getString(R.string.lakcimek));
-
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        Places.initialize(this, getString(R.string.google_maps_key));
         locAAutocompleteFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.locAAutocompleteFragment);
         locBAutocompleteFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.locBAutocompleteFragment);
 
@@ -137,7 +115,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         locAEditText = (EditText) ((LinearLayout) locAAutocompleteFragment.getView()).getChildAt(1);
         locBEditText = (EditText) ((LinearLayout) locBAutocompleteFragment.getView()).getChildAt(1);
 
+
+        headerTextView = findViewById(R.id.headerTextView);
+        instructionTextView = findViewById(R.id.instructionTextView);
+
         showDialog();
+    }
+
+    private void initPlacesApi() {
+        if (geoApiContext == null) {
+            geoApiContext = new GeoApiContext.Builder()
+                    .apiKey(getString(R.string.google_maps_key))
+                    .build();
+        }
+        Places.initialize(this, getString(R.string.google_maps_key));
     }
 
     @Override
@@ -185,10 +176,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void initSearch() {
-
         locAAutocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
         locBAutocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
-
         setAutocompleteFragmentUI();
 
         locAAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
@@ -197,10 +186,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 resetMap(LOC_A_TAG);
                 pickupLocation = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
                 moveCamera(pickupLocation, DEFAULT_ZOOM, place.getName(), R.drawable.ic_loc_a_map);
-
                 if (!locBEditText.getText().toString().equals(""))
                     calculateDirections(dropoffLocation);
-
             }
 
             @Override
@@ -213,14 +200,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         locBAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-
                 resetMap(LOC_B_TAG);
-
                 dropoffLocation = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
-
                 moveCamera(dropoffLocation, DEFAULT_ZOOM, place.getName(), R.drawable.ic_loc_b_map);
-                calculateDirections(dropoffLocation);
-
+                if (!locAEditText.getText().toString().equals(""))
+                    calculateDirections(dropoffLocation);
             }
 
             @Override
@@ -229,7 +213,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Log.i("Tag", "An error occurred: " + status);
             }
         });
-
     }
 
 
@@ -249,30 +232,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 marker.setTag("locB");
 
             markers.add(marker);
-
         }
-        //hideSoftKeyboard();
-    }
-
-    private void hideSoftKeyboard() {
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     private void setAutocompleteFragmentUI() {
-        locAImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_loc_a));
-        //locAImageView.setPadding(PADDING, PADDING, PADDING, PADDING);
-
-        locBImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_loc_b));
-        //locBImageView.setPadding(PADDING, PADDING, PADDING, PADDING);
-
+        locAImageView.setImageDrawable(getDrawable(R.drawable.ic_loc_a));
+        locBImageView.setImageDrawable(getDrawable(R.drawable.ic_loc_b));
         locAEditText.setTextSize(TEXT_SIZE);
         locBEditText.setTextSize(TEXT_SIZE);
-
-        locAAutocompleteFragment.setHint("Költözködés innen");
-        locBAutocompleteFragment.setHint("Költözködés ide");
-
+        locAAutocompleteFragment.setHint(getString(R.string.pickup_location));
+        locBAutocompleteFragment.setHint(getString(R.string.dropoff_location));
     }
-
 
     private BitmapDescriptor getMarkerIconFromDrawable(Drawable drawable) {
         Canvas canvas = new Canvas();
@@ -285,14 +255,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void calculateDirections(LatLng place) {
         Log.d("Tag", "calculateDirections: calculating directions.");
-
         com.google.maps.model.LatLng destination = new com.google.maps.model.LatLng(
                 place.latitude,
                 place.longitude
         );
         DirectionsApiRequest directions = new DirectionsApiRequest(geoApiContext);
 
-        directions.alternatives(true);
         directions.origin(
                 new com.google.maps.model.LatLng(
                         pickupLocation.latitude,
@@ -338,7 +306,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void zoomRoute(List<LatLng> lstLatLngRoute) {
-
         if (mMap == null || lstLatLngRoute == null || lstLatLngRoute.isEmpty()) return;
 
         LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
@@ -368,9 +335,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void showDialog() {
-        new AlertDialog.Builder(MapsActivity.this)
-                .setMessage("Aktuális tartózkodási hely beállítása")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        new MaterialAlertDialogBuilder(MapsActivity.this)
+                .setMessage(getString(R.string.use_current_location_as_pickup_location))
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         pickupLocation = userLocation;
@@ -380,7 +347,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         moveCamera(pickupLocation, DEFAULT_ZOOM, address, R.drawable.ic_loc_a_map);
                     }
                 })
-                .setNegativeButton("No", null)
+                .setNegativeButton(getString(R.string.no), null)
+                .setCancelable(false)
                 .show();
     }
 
@@ -397,4 +365,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return null;
     }
 
+    public void resizeMap(View v) {
+        if (mMapLayoutState == MAP_LAYOUT_STATE_CONTRACTED) {
+            mMapLayoutState = MAP_LAYOUT_STATE_EXPANDED;
+            expandMap();
+            ((ImageButton) v).setImageDrawable(getDrawable(R.drawable.ic_fullscreen_exit));
+        } else if (mMapLayoutState == MAP_LAYOUT_STATE_EXPANDED) {
+            mMapLayoutState = MAP_LAYOUT_STATE_CONTRACTED;
+            contractMap();
+            ((ImageButton) v).setImageDrawable(getDrawable(R.drawable.ic_fullscreen));
+        }
+    }
+
+    private void expandMap() {
+        headerTextView.setVisibility(View.GONE);
+        instructionTextView.setVisibility(View.GONE);
+    }
+
+    private void contractMap() {
+        headerTextView.setVisibility(View.VISIBLE);
+        instructionTextView.setVisibility(View.VISIBLE);
+    }
+
+    public void back(View view) {
+        onBackPressed();
+    }
 }

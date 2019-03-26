@@ -2,13 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/getPhoneNumberConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.GetPhoneNumberActivity">
-
-    <!--  <include
-          android:id="@+id/toolbar"
-          layout="@layout/app_bar" />-->
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -26,38 +23,19 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/phoneNumberTextInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/name_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Telefonszám" />
-    </com.google.android.material.textfield.TextInputLayout>
-
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/headerTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
-        android:text="1. lépés"
+        android:text="@string/step_one"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/instructionTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -67,14 +45,36 @@
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/headerTextView" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/phoneNumberTextInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:hint="@string/phone_number"
+        app:helperText="@string/phone_number_helper"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/instructionTextView">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/phoneNumberEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomNavBarConstraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
-        android:elevation="10dp"
+        android:elevation="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -87,8 +87,9 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:onClick="back"
             android:padding="0dp"
-            android:text="Vissza"
+            android:text="@string/back"
             app:icon="@drawable/ic_chevron_left"
             app:iconPadding="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -96,31 +97,32 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.chabbal.slidingdotsplash.SlidingSplashView
-            android:id="@+id/splash"
+            android:id="@+id/slidingSplashView"
             android:layout_width="100dp"
             android:layout_height="30dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             app:imageResources="@array/img_id_arr"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/nextButton"
+            app:layout_constraintEnd_toStartOf="@+id/requestCodeButton"
             app:layout_constraintStart_toEndOf="@+id/backButton"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/nextButton"
+            android:id="@+id/requestCodeButton"
             style="@style/Widget.MaterialComponents.Button.TextButton"
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
+            android:onClick="requestCode"
             android:padding="0dp"
             android:rotation="180"
             android:scaleX="1"
             android:scaleY="-1"
-            android:text="Tovább"
+            android:text="@string/next"
             android:textScaleX="-1"
             app:icon="@drawable/ic_chevron_left"
             app:iconPadding="0dp"
@@ -129,73 +131,5 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <!-- <android.support.constraint.ConstraintLayout
-         android:id="@+id/phoneNumberConstraintLayout"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_marginStart="8dp"
-         android:layout_marginTop="32dp"
-         android:layout_marginEnd="8dp"
-         android:background="@drawable/input_bg"
-         android:elevation="3dp"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintTop_toBottomOf="@+id/name_text_input">
-
-         <TextView
-             android:id="@+id/countryCallingCodeTextView"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:text="+36"
-             android:textSize="18sp"
-             app:layout_constraintBottom_toBottomOf="parent"
-             app:layout_constraintStart_toStartOf="parent"
-             app:layout_constraintTop_toTopOf="parent" />
-
-         <com.santalu.maskedittext.MaskEditText
-             android:id="@+id/phoneNumberEditText"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_marginStart="8dp"
-             android:background="@android:color/transparent"
-             android:hint="20 123 4567"
-             android:inputType="phone"
-             app:layout_constraintBottom_toBottomOf="parent"
-             app:layout_constraintStart_toEndOf="@id/countryCallingCodeTextView"
-             app:layout_constraintTop_toTopOf="parent"
-             app:met_mask="## ### ####" />
-
-     </android.support.constraint.ConstraintLayout>
-    <TextView
-        android:id="@+id/instructionPhoneNumberTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="8dp"
-        android:alpha="0"
-        android:background="@drawable/instruction_bg"
-        android:elevation="4dp"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phoneNumberConstraintLayout" />-->
-
-    <!-- <Button
-         android:id="@+id/requestCodeButton"
-         style="@style/Widget.MaterialComponents.Button"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_marginStart="8dp"
-         android:layout_marginTop="32dp"
-         android:layout_marginEnd="8dp"
-         android:onClick="requestCode"
-         android:text="@string/tovabb"
-         android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintTop_toBottomOf="@+id/name_text_input" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
