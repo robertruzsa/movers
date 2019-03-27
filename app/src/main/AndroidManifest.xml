@@ -33,13 +33,13 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".view.MapsActivity"
+            android:name=".ui.MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".view.SignUpActivity" />
-        <activity android:name=".view.VerificationActivity" />
-        <activity android:name=".view.GetPhoneNumberActivity" />
-        <activity android:name=".view.GetStartedActivity" />
-        <activity android:name=".view.SplashActivity">
+        <activity android:name=".ui.SignUpActivity" />
+        <activity android:name=".ui.VerificationActivity" />
+        <activity android:name=".ui.GetPhoneNumberActivity" />
+        <activity android:name=".ui.GetStartedActivity" />
+        <activity android:name=".ui.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

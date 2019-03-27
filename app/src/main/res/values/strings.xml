@@ -3,7 +3,7 @@
     <string name="app_logo">App logo</string>
     <string name="client">Költözködő</string>
     <string name="mover">Költöztető</string>
-    <string name="instruction_get_started">Költözkődő vagy Költöztető módban szeretné használni az alkalmazást?</string>
+    <string name="instruction_get_started">Költözkődő vagy Költöztető módban szeretné használni az alkalmazást?\n\nFolytatás, mint:</string>
     <string name="instruction_phone_number">Adja meg telefonszámát, hogy felvehessük Önnel a kapcsolatot.</string>
     <string name="next">Tovább</string>
     <string name="verification">Verifikáció</string>
@@ -14,7 +14,7 @@
     <string name="registration">Regisztráció</string>
     <string name="save">Mentés</string>
     <string name="title_activity_maps">Map</string>
-    <string name="addresses">Lakcímek</string>
+    <string name="locations">Lakcímek</string>
     <string name="phone_number_helper">Formátum: +36 20 123 4567</string>
     <string name="user_type_selection">Felhasználó típus kiválasztása</string>
     <string name="step_one">1. lépés</string>
@@ -39,6 +39,7 @@
     <string name="instruction_locations">Adja meg, honnan hová szeretne költözködni.</string>
     <string name="sending_code">Kód elküldése folyamatban...</string>
     <string name="contact">Elérhetőség</string>
+    <string name="optional">*Opcionális</string>
 
     <integer-array name="img_id_arr">
         <item>1</item>

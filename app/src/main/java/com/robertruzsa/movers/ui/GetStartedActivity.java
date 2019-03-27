@@ -1,26 +1,16 @@
-package com.robertruzsa.movers.view;
+package com.robertruzsa.movers.ui;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.graphics.Typeface;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.robertruzsa.movers.auth.Authentication;
 import com.robertruzsa.movers.R;
-import com.robertruzsa.movers.helper.Instruction;
 
 public class GetStartedActivity extends AppCompatActivity {
 
@@ -50,6 +40,5 @@ public class GetStartedActivity extends AppCompatActivity {
             }
         });
         Log.i("Info", "Redirecting as " + userType);
-
     }
 }

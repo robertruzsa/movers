@@ -1,4 +1,4 @@
-package com.robertruzsa.movers.view;
+package com.robertruzsa.movers.ui;
 
 import android.app.ActivityOptions;
 import android.content.Intent;

@@ -4,9 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.parse.FunctionCallback;
 import com.parse.LogInCallback;
@@ -14,10 +15,9 @@ import com.parse.ParseAnonymousUtils;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseUser;
-import com.robertruzsa.movers.view.GetPhoneNumberActivity;
-import com.robertruzsa.movers.view.SignUpActivity;
-import com.robertruzsa.movers.view.VerificationActivity;
-import com.santalu.maskedittext.MaskEditText;
+import com.robertruzsa.movers.ui.GetPhoneNumberActivity;
+import com.robertruzsa.movers.ui.SignUpActivity;
+import com.robertruzsa.movers.ui.VerificationActivity;
 
 import org.json.JSONObject;
 
@@ -70,12 +70,13 @@ public class Authentication {
     public void requestPhoneVerification(final String phoneNumber, final ProgressDialog progressDialog) {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("phoneNumber", phoneNumber);
+
         ParseCloud.callFunctionInBackground("sendVerificationCode", params, new FunctionCallback<JSONObject>() {
             public void done(JSONObject response, ParseException e) {
+                Toast toast;
                 if (e == null) {
                     Log.d("Response", "No exceptions!");
-                    Toast.makeText(context, "A verifikációs kód elküldésre került.", Toast.LENGTH_LONG).show();
-
+                    showToastMessage("A verifikációs kód elküldésre került.");
                     if (progressDialog != null) {
                         progressDialog.dismiss();
                         Intent intent = new Intent(context, VerificationActivity.class);
@@ -85,7 +86,7 @@ public class Authentication {
 
                 } else {
                     Log.i("Response", "Exception: " + e);
-                    Toast.makeText(context, "A verifikációs kód elküldése során hiba történt. Próbálkozzon újra.", Toast.LENGTH_LONG).show();
+                    showToastMessage("A verifikációs kód elküldése során hiba történt. Próbálkozzon újra.");
                     if (progressDialog != null)
                         progressDialog.dismiss();
                 }
@@ -124,5 +125,11 @@ public class Authentication {
                 }
             }
         });
+    }
+
+    private void showToastMessage(String message) {
+        Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.BOTTOM,0,200);
+        toast.show();
     }
 }

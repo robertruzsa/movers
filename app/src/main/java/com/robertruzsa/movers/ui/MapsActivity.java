@@ -1,7 +1,6 @@
-package com.robertruzsa.movers.view;
+package com.robertruzsa.movers.ui;
 
 import android.Manifest;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -22,18 +21,13 @@ import androidx.core.app.ActivityCompat;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -52,7 +46,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.libraries.places.api.Places;
 
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -71,7 +64,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
@@ -79,7 +72,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     LocationListener locationListener;
 
     private static final float DEFAULT_ZOOM = 15;
-    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(-40, -168), new LatLng(71, 136));
     private static final float TEXT_SIZE = 18f;
     private static final String LOC_A_TAG = "locA";
     private static final String LOC_B_TAG = "locB";
@@ -89,7 +81,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LatLng userLocation, pickupLocation, dropoffLocation;
     private ImageView locAImageView, locBImageView;
     private EditText locAEditText, locBEditText;
-    private TextView headerTextView, instructionTextView;
 
     private List<Marker> markers = new ArrayList<>();
     private List<Polyline> polylines = new ArrayList<>();
@@ -105,6 +96,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        setToolbarTitle(getString(R.string.locations));
+        setHeaderTextView(getString(R.string.step_four));
+        setBodyTextView(getString(R.string.instruction_locations));
+        setPageIndicatorViewProgress();
+
         initPlacesApi();
 
         locAAutocompleteFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.locAAutocompleteFragment);
@@ -114,10 +110,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         locBImageView = (ImageView) ((LinearLayout) locBAutocompleteFragment.getView()).getChildAt(0);
         locAEditText = (EditText) ((LinearLayout) locAAutocompleteFragment.getView()).getChildAt(1);
         locBEditText = (EditText) ((LinearLayout) locBAutocompleteFragment.getView()).getChildAt(1);
-
-
-        headerTextView = findViewById(R.id.headerTextView);
-        instructionTextView = findViewById(R.id.instructionTextView);
 
         showDialog();
     }
@@ -163,7 +155,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             moveCamera(userLocation, DEFAULT_ZOOM, "My Location", 0);
             initSearch();
         }
-
     }
 
     @Override
@@ -236,8 +227,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void setAutocompleteFragmentUI() {
-        locAImageView.setImageDrawable(getDrawable(R.drawable.ic_loc_a));
-        locBImageView.setImageDrawable(getDrawable(R.drawable.ic_loc_b));
+        locAImageView.setImageDrawable(getDrawable(R.drawable.ic_loc_a_search_bar));
+        locBImageView.setImageDrawable(getDrawable(R.drawable.ic_loc_b_search_bar));
         locAEditText.setTextSize(TEXT_SIZE);
         locBEditText.setTextSize(TEXT_SIZE);
         locAAutocompleteFragment.setHint(getString(R.string.pickup_location));
@@ -378,16 +369,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void expandMap() {
-        headerTextView.setVisibility(View.GONE);
-        instructionTextView.setVisibility(View.GONE);
+        getHeaderTextView().setVisibility(View.GONE);
+        getBodyTextView().setVisibility(View.GONE);
+        setActivityContainerTopMargin(0);
     }
 
     private void contractMap() {
-        headerTextView.setVisibility(View.VISIBLE);
-        instructionTextView.setVisibility(View.VISIBLE);
+        getHeaderTextView().setVisibility(View.VISIBLE);
+        getBodyTextView().setVisibility(View.VISIBLE);
+        setActivityContainerTopMargin(24);
     }
 
-    public void back(View view) {
-        onBackPressed();
-    }
 }
