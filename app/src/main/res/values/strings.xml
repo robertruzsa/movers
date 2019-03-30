@@ -40,6 +40,15 @@
     <string name="sending_code">Kód elküldése folyamatban...</string>
     <string name="contact">Elérhetőség</string>
     <string name="optional">*Opcionális</string>
+    <string name="vehicle_type">Költöztető jármű típusa</string>
+    <string name="step_five">5. lépés</string>
+    <string name="instruction_vehicle_type">Adja meg, milyen jármű-típussal rendelkező Költöztetők között keressünk.\n\nEgyszerre több jármű-típus is megadható.</string>
+    <string name="car">Személyautó</string>
+    <string name="van">Kisteheratuó</string>
+    <string name="truck">Kamion</string>
+    <string name="description_car">Néhány bőrönd esetén.</string>
+    <string name="description_van">Egy teljes szoba esetén.</string>
+    <string name="description_truck">Lakásköltöztetéshez.</string>
 
     <integer-array name="img_id_arr">
         <item>1</item>

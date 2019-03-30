@@ -3,6 +3,7 @@ package com.robertruzsa.movers.ui;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -112,6 +113,14 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
         locBEditText = (EditText) ((LinearLayout) locBAutocompleteFragment.getView()).getChildAt(1);
 
         showDialog();
+
+        getNextButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SelectVehicleActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initPlacesApi() {

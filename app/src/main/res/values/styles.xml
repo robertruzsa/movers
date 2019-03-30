@@ -6,12 +6,6 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowActivityTransitions">true</item>
-    </style>
-
-    <style name="SwitchCompatTheme">
-        <item name="android:thumbTint">@color/colorBlueDark</item>
-        <item name="android:trackTint">@color/colorBlueDark</item>
     </style>
 
 </resources>

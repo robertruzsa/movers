@@ -6,10 +6,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.robertruzsa.movers.R;
 
 import java.util.regex.Pattern;
@@ -59,7 +63,7 @@ public class SignUpActivity extends BaseActivity {
     public void saveUserData() {
         String emailAddress = emailEditText.getText().toString().trim();
         String name = nameEditText.getText().toString().trim();
-        /*if (validateEmailAddress(emailAddress)) {
+        if (validateName(name) && validateEmailAddress(emailAddress)) {
             ParseUser.getCurrentUser().put("name", nameEditText.getText().toString());
             if (!emailEditText.equals(""))
                 ParseUser.getCurrentUser().setEmail(emailEditText.getText().toString());
@@ -72,12 +76,12 @@ public class SignUpActivity extends BaseActivity {
                     startActivity(intent);
                 }
             });
-        }*/
+        }
 
-        if (validateName(name) & validateEmailAddress(emailAddress)) {
+        /*if (validateName(name) & validateEmailAddress(emailAddress)) {
             Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
             startActivity(intent);
-        }
+        }*/
     }
 
     public boolean validateEmailAddress(String emailAddress) {

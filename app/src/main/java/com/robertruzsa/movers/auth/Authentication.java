@@ -107,8 +107,9 @@ public class Authentication {
                         public void done(ParseUser parseUser, ParseException e) {
                             if (e == null) {
                                 Log.d("Response", "no exceptions! ");
-                                Toast.makeText(context, "Sikeres autentikcáió.", Toast.LENGTH_LONG).show();
+                                showToastMessage("Sikeres autentikcáió.");
                                 Intent intent = new Intent(context, SignUpActivity.class);
+                                intent.putExtra("phoneNumber", phoneNumber);
                                 context.startActivity(intent);
                             } else {
                                 Log.d("Response", "Exception: " + e);
