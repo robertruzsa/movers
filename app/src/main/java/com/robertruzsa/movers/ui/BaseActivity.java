@@ -3,6 +3,8 @@ package com.robertruzsa.movers.ui;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.widget.NestedScrollView;
 
 import android.os.Bundle;
 import android.view.View;
@@ -22,7 +24,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     private MaterialButton backButton, nextButton;
     private PageIndicatorView pageIndicatorView;
     private FrameLayout activityContainer;
-    private ConstraintLayout constraintLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public void setContentView(final int layoutResId) {
-        constraintLayout = (ConstraintLayout) getLayoutInflater().inflate(R.layout.activity_base, null);
+        ConstraintLayout  constraintLayout = (ConstraintLayout ) getLayoutInflater().inflate(R.layout.activity_base, null);
         activityContainer = constraintLayout.findViewById(R.id.activityContainer);
         AppBarLayout appBarLayout = constraintLayout.findViewById(R.id.appBarLayout);
         toolbar = (androidx.appcompat.widget.Toolbar) appBarLayout.getChildAt(0);
@@ -48,8 +49,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                hideKeyboard();
             }
         });
 
@@ -103,4 +103,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         activityContainer.setLayoutParams(params);
     }
 
+    protected void hideKeyboard(){
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+    }
+
+    protected Toolbar getToolbar() {
+        return this.toolbar;
+    }
 }

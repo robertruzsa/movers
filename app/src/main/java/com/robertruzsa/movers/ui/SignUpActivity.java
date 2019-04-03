@@ -22,7 +22,6 @@ public class SignUpActivity extends BaseActivity {
 
     private TextInputLayout nameTextInputLayout, emailTextInputLayout, phoneTextInputLayout;
     private TextInputEditText nameEditText, emailEditText, phoneNumberEditText;
-    ConstraintLayout signUpConstraintLayout;
 
     private String phoneNumber;
 

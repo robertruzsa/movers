@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.icu.text.TimeZoneFormat;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -56,6 +57,13 @@ import com.google.maps.PendingResult;
 import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.robertruzsa.movers.R;
 
 
@@ -117,7 +125,8 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
         getNextButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), SelectVehicleActivity.class);
+                //Intent intent = new Intent(getApplicationContext(), SelectVehicleActivity.class);
+                Intent intent = new Intent(getApplicationContext(), LocationDetailsActivity.class);
                 startActivity(intent);
             }
         });
@@ -389,4 +398,37 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
         setActivityContainerTopMargin(24);
     }
 
+    /*private void saveRequest() {
+        // Is there an active request?
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Request");
+        query.whereEqualTo("clientName", ParseUser.getCurrentUser().get("name"));
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    if (objects.size() > 0) {
+                    }
+                }
+
+            }
+        });
+
+        ParseObject request = new ParseObject("Request");
+        request.put("clientName", ParseUser.getCurrentUser().get("name"));
+        //request.put("phoneNumber", ParseUser.getCurrentUser().get("phoneNumber"));
+        request.put("pickupLocation", new ParseGeoPoint(pickupLocation.latitude, pickupLocation.longitude));
+        request.put("dropoffLocation", dropoffLocation.toString().replace("lat/lng: ", ""));
+        request.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null)
+                    Log.i("Error", e.toString());
+                else {
+                    Intent intent = new Intent(getApplicationContext(), SelectVehicleActivity.class);
+                    startActivity(intent);
+                }
+
+            }
+        });
+    }*/
 }

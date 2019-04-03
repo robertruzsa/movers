@@ -49,12 +49,8 @@
     <string name="description_car">Néhány bőrönd esetén.</string>
     <string name="description_van">Egy teljes szoba esetén.</string>
     <string name="description_truck">Lakásköltöztetéshez.</string>
-
-    <integer-array name="img_id_arr">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-    </integer-array>
+    <string name="step_six">6. lépés</string>
+    <string name="instruction_time">Adja meg a költözködés tervezett időpontját.</string>
+    <string name="date">Dátum</string>
+    <string name="time">Időpont</string>
 </resources>

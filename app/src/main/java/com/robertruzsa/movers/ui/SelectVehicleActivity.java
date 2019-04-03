@@ -3,7 +3,9 @@ package com.robertruzsa.movers.ui;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.robertruzsa.movers.R;
 import com.robertruzsa.movers.adapter.VehicleTypeAdapter;
@@ -39,5 +41,13 @@ public class SelectVehicleActivity extends BaseActivity {
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
+        getNextButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), DateTimeActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
