@@ -25,7 +25,7 @@ public class SelectVehicleActivity extends BaseActivity {
         setContentView(R.layout.activity_select_vehicle);
 
         setToolbarTitle(getString(R.string.vehicle_type));
-        setHeaderTextView(getString(R.string.step_six));
+        setHeaderTextView(getString(R.string.step_eight));
         setBodyTextView(getString(R.string.instruction_vehicle_type));
         setPageIndicatorViewProgress();
 

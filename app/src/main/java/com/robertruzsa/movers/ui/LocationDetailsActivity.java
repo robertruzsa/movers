@@ -28,11 +28,6 @@ public class LocationDetailsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_details);
 
-        getHeaderTextView().setVisibility(View.VISIBLE);
-        getBodyTextView().setVisibility(View.VISIBLE);
-
-        setToolbarTitle(getString(R.string.locations));
-
         setToolbarTitle(getString(R.string.locations));
         setHeaderTextView(getString(R.string.step_five));
         setBodyTextView(getString(R.string.instruction_more_locaction_information));
@@ -62,7 +57,7 @@ public class LocationDetailsActivity extends BaseActivity {
         getNextButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), SelectVehicleActivity.class);
+                Intent intent = new Intent(getApplicationContext(), DateTimeActivity.class);
                 startActivity(intent);
             }
         });

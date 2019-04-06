@@ -55,4 +55,7 @@
     <string name="time">Időpont</string>
     <string name="instruction_more_locaction_information">További információk a helyszínekről.</string>
     <string name="step_seven">7. lépés</string>
+    <string name="step_eight">8. lépés</string>
+    <string name="extra_information">További információk</string>
+    <string name="instruction_moving_details">Adja meg az elszállítandó tételeket és azok mennyiségét.\n\nPéldául: dobozok száma, szekrények száma, mosógép, hűtő, ágy, kanapé.\n\nA csomagokról fényképeket is csatolhat.</string>
 </resources>

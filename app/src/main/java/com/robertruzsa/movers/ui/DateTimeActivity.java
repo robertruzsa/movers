@@ -4,6 +4,7 @@ import androidx.fragment.app.DialogFragment;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
@@ -31,7 +32,7 @@ public class DateTimeActivity extends BaseActivity implements DatePickerDialog.O
         setContentView(R.layout.activity_date_time);
 
         setToolbarTitle(getString(R.string.time));
-        setHeaderTextView(getString(R.string.step_seven));
+        setHeaderTextView(getString(R.string.step_six));
         setBodyTextView(getString(R.string.instruction_time));
         setPageIndicatorViewProgress();
 
@@ -73,6 +74,14 @@ public class DateTimeActivity extends BaseActivity implements DatePickerDialog.O
             @Override
             public void onClick(View v) {
                 timePicker.show(getSupportFragmentManager(), "time picker");
+            }
+        });
+
+        getNextButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MovingDetailsActivity.class);
+                startActivity(intent);
             }
         });
     }
