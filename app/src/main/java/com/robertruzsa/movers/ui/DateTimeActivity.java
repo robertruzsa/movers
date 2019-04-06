@@ -1,19 +1,12 @@
 package com.robertruzsa.movers.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.gesture.GestureOverlayView;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -35,10 +28,10 @@ public class DateTimeActivity extends BaseActivity implements DatePickerDialog.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_date);
+        setContentView(R.layout.activity_date_time);
 
         setToolbarTitle(getString(R.string.time));
-        setHeaderTextView(getString(R.string.step_six));
+        setHeaderTextView(getString(R.string.step_seven));
         setBodyTextView(getString(R.string.instruction_time));
         setPageIndicatorViewProgress();
 

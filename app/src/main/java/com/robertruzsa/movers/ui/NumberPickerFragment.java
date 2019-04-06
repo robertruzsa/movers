@@ -28,8 +28,6 @@ public class NumberPickerFragment extends DialogFragment {
             }
         });
 
-        builder.setNegativeButton("MÉGSE", null);
-
         builder.setView(numberPicker);
         return builder.create();
     }

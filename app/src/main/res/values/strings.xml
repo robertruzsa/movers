@@ -53,4 +53,6 @@
     <string name="instruction_time">Adja meg a költözködés tervezett időpontját.</string>
     <string name="date">Dátum</string>
     <string name="time">Időpont</string>
+    <string name="instruction_more_locaction_information">További információk a helyszínekről.</string>
+    <string name="step_seven">7. lépés</string>
 </resources>

@@ -7,8 +7,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.icu.text.TimeZoneFormat;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
 import android.os.Bundle;
@@ -26,6 +27,9 @@ import androidx.core.content.ContextCompat;
 
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -57,13 +61,6 @@ import com.google.maps.PendingResult;
 import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
 import com.robertruzsa.movers.R;
 
 
@@ -97,6 +94,12 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
     private static final int MAP_LAYOUT_STATE_CONTRACTED = 0;
     private static final int MAP_LAYOUT_STATE_EXPANDED = 1;
     private int mMapLayoutState = 0;
+    private ConstraintLayout constraintLayout;
+
+    private int mapSizeExpanded;
+    private int mapSizeCollapsed;
+    private SupportMapFragment mMapFragment;
+    private ViewTreeObserver viewTreeObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +133,13 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
                 startActivity(intent);
             }
         });
+
+        constraintLayout = findViewById(R.id.constraintLayout);
+        mMapFragment = (SupportMapFragment) (getSupportFragmentManager().findFragmentById(R.id.map));
+
+        initMapSize();
+        setMapSize(false);
+
     }
 
     private void initPlacesApi() {
@@ -381,7 +391,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
             ((ImageButton) v).setImageDrawable(getDrawable(R.drawable.ic_fullscreen_exit));
         } else if (mMapLayoutState == MAP_LAYOUT_STATE_EXPANDED) {
             mMapLayoutState = MAP_LAYOUT_STATE_CONTRACTED;
-            contractMap();
+            collapseMap();
             ((ImageButton) v).setImageDrawable(getDrawable(R.drawable.ic_fullscreen));
         }
     }
@@ -389,13 +399,53 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
     private void expandMap() {
         getHeaderTextView().setVisibility(View.GONE);
         getBodyTextView().setVisibility(View.GONE);
-        setActivityContainerTopMargin(0);
+        setMapSize(true);
     }
 
-    private void contractMap() {
+    private void collapseMap() {
         getHeaderTextView().setVisibility(View.VISIBLE);
         getBodyTextView().setVisibility(View.VISIBLE);
-        setActivityContainerTopMargin(24);
+        setMapSize(false);
+    }
+
+    private void setMapSize(boolean isExpanded) {
+        viewTreeObserver = constraintLayout.getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                constraintLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                ViewGroup.LayoutParams params = mMapFragment.getView().getLayoutParams();
+                if (!isExpanded)
+                    params.height = mapSizeCollapsed;
+                else
+                    params.height = mapSizeExpanded;
+                mMapFragment.getView().setLayoutParams(params);
+            }
+        });
+    }
+
+    private void initMapSize() {
+        viewTreeObserver = constraintLayout.getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                constraintLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                int screenHeight = getResources().getDisplayMetrics().heightPixels;
+                Rect rectangle = new Rect();
+                Window window = getWindow();
+                window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
+                int statusBarHeight = rectangle.top;
+                int toolBarHeight = getToolbar().getMeasuredHeight();
+                int headerHeight = getHeaderTextView().getMeasuredHeight();
+                int bodyHeight = getBodyTextView().getMeasuredHeight();
+                int locAEditTextHeight = locAEditText.getMeasuredHeight();
+                int locBEditTextHeight = locBEditText.getMeasuredHeight();
+                int bottomNavBarHeight = getBottomNavigationBar().getMeasuredHeight();
+                int expandedHeight = screenHeight - statusBarHeight - toolBarHeight - locAEditTextHeight - locBEditTextHeight - bottomNavBarHeight;
+                mapSizeExpanded = expandedHeight;
+                mapSizeCollapsed = expandedHeight - headerHeight - bodyHeight;
+            }
+        });
     }
 
     /*private void saveRequest() {

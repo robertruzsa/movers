@@ -4,6 +4,7 @@ import androidx.fragment.app.DialogFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.NumberPicker;
 
@@ -12,68 +13,104 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.robertruzsa.movers.R;
 
-public class LocationDetailsActivity extends BaseActivity implements NumberPicker.OnValueChangeListener {
+public class LocationDetailsActivity extends BaseActivity {
 
     private DialogFragment numberPicker;
-    private TextInputLayout floorNumberTextInputLayout;
-    private TextInputEditText floorNumberEditText;
-    private MaterialCheckBox elevatorCheckBox;
+    private TextInputLayout pickupLocFloorNumberTextInputLayout, dropoffLocFloorNumberTextInputLayout;
+    private TextInputEditText pickupLocFloorNumberEditText, dropoffLocFloorNumberEditText;
+    private MaterialCheckBox pickupLocElevatorCheckBox, dropoffLocElevatorCheckBox;
+
+    private boolean pickupLocClicked = false;
+    private boolean dropoffLocClicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_details);
 
+        getHeaderTextView().setVisibility(View.VISIBLE);
+        getBodyTextView().setVisibility(View.VISIBLE);
+
         setToolbarTitle(getString(R.string.locations));
-        getHeaderTextView().setVisibility(View.GONE);
-        getBodyTextView().setVisibility(View.GONE);
 
-        floorNumberTextInputLayout = findViewById(R.id.floorNumberTextInputLayout);
-        floorNumberEditText = (TextInputEditText) floorNumberTextInputLayout.getEditText();
+        setToolbarTitle(getString(R.string.locations));
+        setHeaderTextView(getString(R.string.step_five));
+        setBodyTextView(getString(R.string.instruction_more_locaction_information));
+        setPageIndicatorViewProgress();
 
-        elevatorCheckBox = findViewById(R.id.elevatorCheckBox);
-        elevatorCheckBox.setEnabled(false);
+        getCoordinatorLayout().setFocusable(true);
+        getCoordinatorLayout().setFocusableInTouchMode(true);
+
+        pickupLocFloorNumberTextInputLayout = findViewById(R.id.pickupLocFloorNumberTextInputLayout);
+        pickupLocFloorNumberEditText = (TextInputEditText) pickupLocFloorNumberTextInputLayout.getEditText();
+
+        dropoffLocFloorNumberTextInputLayout = findViewById(R.id.dropoffLocFloorNumberTextInputLayout);
+        dropoffLocFloorNumberEditText = (TextInputEditText) dropoffLocFloorNumberTextInputLayout.getEditText();
+
+        pickupLocElevatorCheckBox = findViewById(R.id.pickupLocElevatorCheckBox);
+        dropoffLocElevatorCheckBox = findViewById(R.id.dropoffLocElevatorCheckBox);
 
         numberPicker = new NumberPickerFragment();
-        ((NumberPickerFragment) numberPicker).setValueChangeListener(this);
+        ((NumberPickerFragment) numberPicker).setValueChangeListener(onValueChangeListener);
 
-        floorNumberEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    floorNumberEditText.clearFocus();
-                    numberPicker.show(getSupportFragmentManager(), "number picker");
-                }
-            }
-        });
+        pickupLocFloorNumberEditText.setOnFocusChangeListener(onFocusChangeListener);
+        pickupLocFloorNumberEditText.setOnClickListener(onClickListener);
 
-        floorNumberEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                floorNumberEditText.clearFocus();
-                numberPicker.show(getSupportFragmentManager(), "number picker");
-            }
-        });
+        dropoffLocFloorNumberEditText.setOnFocusChangeListener(onFocusChangeListener);
+        dropoffLocFloorNumberEditText.setOnClickListener(onClickListener);
 
         getNextButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), DateTimeActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SelectVehicleActivity.class);
                 startActivity(intent);
             }
         });
-
     }
 
-    @Override
-    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+    View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (hasFocus) {
+                if (v == pickupLocFloorNumberEditText)
+                    pickupLocClicked = true;
+                else if (v == dropoffLocFloorNumberEditText)
+                    dropoffLocClicked = true;
+                numberPicker.show(getSupportFragmentManager(), "number picker");
+            }
+        }
+    };
+
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (v == pickupLocFloorNumberEditText)
+                pickupLocClicked = true;
+            else if (v == dropoffLocFloorNumberEditText)
+                dropoffLocClicked = true;
+            numberPicker.show(getSupportFragmentManager(), "number picker");
+        }
+    };
+
+    NumberPicker.OnValueChangeListener onValueChangeListener = new NumberPicker.OnValueChangeListener() {
+        @Override
+        public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+            if (pickupLocClicked)
+                setFloorNumberEditText(pickupLocFloorNumberEditText, pickupLocElevatorCheckBox, newVal);
+            else if (dropoffLocClicked)
+                setFloorNumberEditText(dropoffLocFloorNumberEditText, dropoffLocElevatorCheckBox, newVal);
+            pickupLocClicked = false;
+            dropoffLocClicked = false;
+        }
+    };
+
+    void setFloorNumberEditText(TextInputEditText editText, MaterialCheckBox checkBox, int newVal) {
         if (newVal != 0) {
-            floorNumberEditText.setText(String.valueOf(newVal));
-            elevatorCheckBox.setEnabled(true);
+            editText.setText(String.valueOf(newVal));
+            checkBox.setEnabled(true);
         } else {
-            floorNumberEditText.setText("Földszint");
-            elevatorCheckBox.setEnabled(false);
+            editText.setText("Földszint");
+            checkBox.setEnabled(false);
         }
     }
-
 }

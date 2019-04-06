@@ -7,9 +7,14 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.widget.NestedScrollView;
 
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -25,6 +30,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     private PageIndicatorView pageIndicatorView;
     private FrameLayout activityContainer;
 
+    private CoordinatorLayout coordinatorLayout;
+    private ConstraintLayout bottomNavigationBar;
+
+    ConstraintLayout constraintLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,26 +42,27 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public void setContentView(final int layoutResId) {
-        ConstraintLayout  constraintLayout = (ConstraintLayout ) getLayoutInflater().inflate(R.layout.activity_base, null);
-        activityContainer = constraintLayout.findViewById(R.id.activityContainer);
-        AppBarLayout appBarLayout = constraintLayout.findViewById(R.id.appBarLayout);
+        coordinatorLayout = (CoordinatorLayout) getLayoutInflater().inflate(R.layout.activity_base, null);
+        activityContainer = coordinatorLayout.findViewById(R.id.activityContainer);
+        AppBarLayout appBarLayout = coordinatorLayout.findViewById(R.id.appBarLayout);
         toolbar = (androidx.appcompat.widget.Toolbar) appBarLayout.getChildAt(0);
-        headerTextView = constraintLayout.findViewById(R.id.headerTextView);
-        bodyTextView = constraintLayout.findViewById(R.id.bodyTextView);
-        ConstraintLayout bottomNavigationBar = constraintLayout.findViewById(R.id.bottomNavigationBar);
+        headerTextView = coordinatorLayout.findViewById(R.id.headerTextView);
+        bodyTextView = coordinatorLayout.findViewById(R.id.bodyTextView);
+        bottomNavigationBar = coordinatorLayout.findViewById(R.id.bottomNavigationBar);
         backButton = (MaterialButton) bottomNavigationBar.getChildAt(0);
         pageIndicatorView = (PageIndicatorView) bottomNavigationBar.getChildAt(1);
         nextButton = (MaterialButton) bottomNavigationBar.getChildAt(2);
 
-        getLayoutInflater().inflate(layoutResId, activityContainer, true);
-        super.setContentView(constraintLayout);
-
+        constraintLayout = coordinatorLayout.findViewById(R.id.constraintLayout);
         constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 hideKeyboard();
             }
         });
+
+        getLayoutInflater().inflate(layoutResId, activityContainer, true);
+        super.setContentView(coordinatorLayout);
 
         backButton.setOnClickListener(onBackPressedListener);
         toolbar.setNavigationOnClickListener(onBackPressedListener);
@@ -63,6 +74,13 @@ public abstract class BaseActivity extends AppCompatActivity {
             onBackPressed();
         }
     };
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_UP)
+            hideKeyboard();
+        return true;
+    }
 
     protected void setToolbarTitle(String title) {
         toolbar.setTitle(title);
@@ -97,13 +115,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         return bodyTextView;
     }
 
-    protected void setActivityContainerTopMargin(int margin) {
-        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) activityContainer.getLayoutParams();
-        params.setMargins(0, margin, 0, 0);
-        activityContainer.setLayoutParams(params);
-    }
-
-    protected void hideKeyboard(){
+    protected void hideKeyboard() {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
     }
@@ -111,4 +123,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected Toolbar getToolbar() {
         return this.toolbar;
     }
+
+    public ConstraintLayout getBottomNavigationBar() {
+        return bottomNavigationBar;
+    }
+
+
+    public CoordinatorLayout getCoordinatorLayout() {
+        return coordinatorLayout;
+    }
+
 }
