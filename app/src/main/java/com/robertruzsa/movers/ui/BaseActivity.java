@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.rd.PageIndicatorView;
 import com.robertruzsa.movers.R;
 
@@ -117,7 +118,15 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void hideKeyboard() {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        if (getCurrentFocus() != null)
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+    }
+
+    protected void hideViews()
+    {
+        headerTextView.setVisibility(View.GONE);
+        bodyTextView.setVisibility(View.GONE);
+        bottomNavigationBar.setVisibility(View.GONE);
     }
 
     protected Toolbar getToolbar() {
@@ -128,9 +137,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         return bottomNavigationBar;
     }
 
-
     public CoordinatorLayout getCoordinatorLayout() {
         return coordinatorLayout;
+    }
+
+    public PageIndicatorView getPageIndicatorView() {
+        return pageIndicatorView;
     }
 
 }

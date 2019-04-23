@@ -6,16 +6,24 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.robertruzsa.movers.R;
 
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class DateTimeActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -25,6 +33,7 @@ public class DateTimeActivity extends BaseActivity implements DatePickerDialog.O
     private DialogFragment datePicker, timePicker;
 
     private final String LANGUAGE_TAG = "HU";
+    private Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,13 +91,16 @@ public class DateTimeActivity extends BaseActivity implements DatePickerDialog.O
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MovingDetailsActivity.class);
                 startActivity(intent);
+                //saveDateTime();
             }
         });
+
+        calendar = Calendar.getInstance();
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Calendar calendar = Calendar.getInstance();
+        //Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -97,13 +109,54 @@ public class DateTimeActivity extends BaseActivity implements DatePickerDialog.O
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
         calendar.set(Calendar.MINUTE, minute);
-        if (calendar.getTimeInMillis() < Calendar.getInstance().getTimeInMillis())
-            timeTextInputLayout.setError("Érvénytelen időpont");
-        else if (timeTextInputLayout.getError() != null)
-            timeTextInputLayout.setError(null);
         timeEditText.setText(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.forLanguageTag(LANGUAGE_TAG)).format(calendar.getTime()));
+    }
+
+    void saveDateTime() {
+
+        if (!validateDateTime(dateTextInputLayout) | !validateDateTime(timeTextInputLayout))
+            return;
+
+        if (calendar.getTimeInMillis() < Calendar.getInstance().getTimeInMillis()) {
+            timeTextInputLayout.setError("Érvénytelen időpont");
+            return;
+        }
+
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Request");
+        query.whereEqualTo("clientName", ParseUser.getCurrentUser().get("name"));
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    if (objects.size() > 0) {
+                        ParseObject request = objects.get(0);
+                        request.put("dateTime", dateEditText.getText().toString() + " " + timeEditText.getText().toString());
+                        request.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e != null)
+                                    Log.i("Error", e.toString());
+                                else {
+                                    Intent intent = new Intent(getApplicationContext(), MovingDetailsActivity.class);
+                                    startActivity(intent);
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    public boolean validateDateTime(TextInputLayout dateTimeTextInputLayout) {
+        if (!dateTimeTextInputLayout.getEditText().getText().toString().equals("")) {
+            dateTimeTextInputLayout.setError(null);
+            return true;
+        } else {
+            dateTimeTextInputLayout.setError(getString(R.string.required));
+            return false;
+        }
     }
 }

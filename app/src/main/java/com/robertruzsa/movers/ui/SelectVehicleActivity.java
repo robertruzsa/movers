@@ -34,7 +34,7 @@ public class SelectVehicleActivity extends BaseActivity {
         vehicleTypeList.add(new VehicleTypeItem(R.drawable.ic_van, getString(R.string.van), getString(R.string.description_van)));
         vehicleTypeList.add(new VehicleTypeItem(R.drawable.ic_truck, getString(R.string.truck), getString(R.string.description_truck)));
 
-        recyclerView = findViewById(R.id.recycleView);
+        recyclerView = findViewById(R.id.vehicleTypeRecycleView);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         adapter = new VehicleTypeAdapter(vehicleTypeList);
@@ -45,7 +45,10 @@ public class SelectVehicleActivity extends BaseActivity {
         getNextButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), DateTimeActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SelectMoverActivity.class);
+                intent.putExtra("car",vehicleTypeList.get(0).isSelected());
+                intent.putExtra("van",vehicleTypeList.get(1).isSelected());
+                intent.putExtra("truck",vehicleTypeList.get(2).isSelected());
                 startActivity(intent);
             }
         });

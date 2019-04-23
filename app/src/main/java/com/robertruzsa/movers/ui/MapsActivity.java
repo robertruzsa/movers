@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -61,6 +62,11 @@ import com.google.maps.PendingResult;
 import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
+import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.robertruzsa.movers.R;
 
 
@@ -125,12 +131,19 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
 
         showDialog();
 
+        SharedPreferences sharedPreferences = this.getSharedPreferences("com.robertruzsa.movers", Context.MODE_PRIVATE);
+
         getNextButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(getApplicationContext(), SelectVehicleActivity.class);
+
+                sharedPreferences.edit().putFloat("distance", distanceInKilometers()).apply();
+
                 Intent intent = new Intent(getApplicationContext(), LocationDetailsActivity.class);
+                intent.putExtra("pickupLocation", locAEditText.getText().toString());
+                intent.putExtra("dropoffLocation", locBEditText.getText().toString());
                 startActivity(intent);
+                //saveRequest();
             }
         });
 
@@ -203,8 +216,13 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
             @Override
             public void onPlaceSelected(Place place) {
                 resetMap(LOC_A_TAG);
+
+                if (locAEditText.getError() != null)
+                    locAEditText.setError(null);
+
                 pickupLocation = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
                 moveCamera(pickupLocation, DEFAULT_ZOOM, place.getName(), R.drawable.ic_loc_a_map);
+
                 if (!locBEditText.getText().toString().equals(""))
                     calculateDirections(dropoffLocation);
             }
@@ -220,8 +238,13 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
             @Override
             public void onPlaceSelected(Place place) {
                 resetMap(LOC_B_TAG);
+
+                if (locBEditText.getError() != null)
+                    locBEditText.setError(null);
+
                 dropoffLocation = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
                 moveCamera(dropoffLocation, DEFAULT_ZOOM, place.getName(), R.drawable.ic_loc_b_map);
+
                 if (!locAEditText.getText().toString().equals(""))
                     calculateDirections(dropoffLocation);
             }
@@ -448,9 +471,9 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
         });
     }
 
-    /*private void saveRequest() {
+    private void saveRequest() {
         // Is there an active request?
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Request");
+        /*ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Request");
         query.whereEqualTo("clientName", ParseUser.getCurrentUser().get("name"));
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -461,24 +484,54 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
                 }
 
             }
-        });
+        });*/
 
         ParseObject request = new ParseObject("Request");
         request.put("clientName", ParseUser.getCurrentUser().get("name"));
         //request.put("phoneNumber", ParseUser.getCurrentUser().get("phoneNumber"));
-        request.put("pickupLocation", new ParseGeoPoint(pickupLocation.latitude, pickupLocation.longitude));
-        request.put("dropoffLocation", dropoffLocation.toString().replace("lat/lng: ", ""));
+
+        if (validateLocation(pickupLocation, locAEditText) & validateLocation(dropoffLocation, locBEditText)) {
+            request.put("pickupLocation", new ParseGeoPoint(pickupLocation.latitude, pickupLocation.longitude));
+            request.put("dropoffLocation", dropoffLocation.toString().replace("lat/lng: ", ""));
+        } else
+            return;
+
         request.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e != null)
                     Log.i("Error", e.toString());
                 else {
-                    Intent intent = new Intent(getApplicationContext(), SelectVehicleActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), LocationDetailsActivity.class);
+                    intent.putExtra("pickupLocation", locAEditText.getText().toString());
+                    intent.putExtra("dropoffLocation", locBEditText.getText().toString());
                     startActivity(intent);
                 }
 
             }
         });
-    }*/
+    }
+
+    public boolean validateLocation(LatLng location, EditText locationEditText) {
+        if (location != null && !locationEditText.getText().toString().equals("")) {
+            locationEditText.setError(null);
+            return true;
+        } else {
+            locationEditText.setError("");
+            return false;
+        }
+    }
+
+    public float distanceInKilometers(){
+        Location location1 = new Location("");
+        location1.setLatitude(pickupLocation.latitude);
+        location1.setLongitude(pickupLocation.longitude);
+
+        Location location2 = new Location("");
+        location2.setLatitude(dropoffLocation.latitude);
+        location2.setLongitude(dropoffLocation.longitude);
+
+
+        return location1.distanceTo(location2) / 1000;
+    }
 }

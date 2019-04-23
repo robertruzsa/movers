@@ -11,13 +11,25 @@ import androidx.fragment.app.DialogFragment;
 public class NumberPickerFragment extends DialogFragment {
     private NumberPicker.OnValueChangeListener valueChangeListener;
 
+    private int minValue = 0;
+    private int maxValue = 15;
+
+    void setMinValue(int minValue) {
+        this.minValue = minValue;
+    }
+
+    void setMaxValue(int maxValue) {
+        this.maxValue = maxValue;
+    }
+
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         final NumberPicker numberPicker = new NumberPicker(getActivity());
 
-        numberPicker.setMinValue(0);
-        numberPicker.setMaxValue(15);
+        numberPicker.setMinValue(minValue);
+        numberPicker.setMaxValue(maxValue);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 

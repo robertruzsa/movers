@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.parse.FunctionCallback;
@@ -16,7 +15,8 @@ import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.robertruzsa.movers.ui.GetPhoneNumberActivity;
-import com.robertruzsa.movers.ui.SignUpActivity;
+import com.robertruzsa.movers.ui.MoverSignInActivity;
+import com.robertruzsa.movers.ui.ClientSignUpActivity;
 import com.robertruzsa.movers.ui.VerificationActivity;
 
 import org.json.JSONObject;
@@ -63,7 +63,8 @@ public class Authentication {
             Intent intent = new Intent(context, GetPhoneNumberActivity.class);
             context.startActivity(intent);
         } else {
-            // Start MoverActivity
+            Intent intent = new Intent(context, MoverSignInActivity.class);
+            context.startActivity(intent);
         }
     }
 
@@ -108,7 +109,7 @@ public class Authentication {
                             if (e == null) {
                                 Log.d("Response", "no exceptions! ");
                                 showToastMessage("Sikeres autentikcáió.");
-                                Intent intent = new Intent(context, SignUpActivity.class);
+                                Intent intent = new Intent(context, ClientSignUpActivity.class);
                                 intent.putExtra("phoneNumber", phoneNumber);
                                 context.startActivity(intent);
                             } else {

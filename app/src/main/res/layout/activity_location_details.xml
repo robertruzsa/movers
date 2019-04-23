@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@+id/pickupLocFloorNumberTextInputLayout" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/detailsTextInputLayout"
+        android:id="@+id/pickupLocDetailsTextInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detailsTextInputLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/pickupLocDetailsTextInputLayout" />
 
     <TextView
         android:id="@+id/dropoffLocationTextView"
@@ -143,7 +143,7 @@
         app:layout_constraintTop_toBottomOf="@+id/dropoffLocFloorNumberTextInputLayout" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/dropoffLocDetailsTextInputLayout"
+        android:id="@+id/movingDetailsTextInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

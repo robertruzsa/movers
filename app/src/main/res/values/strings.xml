@@ -10,7 +10,7 @@
     <string name="instruction_verification_code">Adja meg az SMS-ben kapott verifikációs kódot.</string>
     <string name="resend_code">Kód újraküldése</string>
     <string name="verification_code">Verifikációs kód</string>
-    <string name="invalid_phone_number">Érvénytelen telefonszám.</string>
+    <string name="invalid_phone_number">Érvénytelen telefonszám</string>
     <string name="registration">Regisztráció</string>
     <string name="save">Mentés</string>
     <string name="title_activity_maps">Map</string>
@@ -29,7 +29,7 @@
     <string name="instruction_personal_information">Adja meg személyes adatait.</string>
     <string name="required">*Kötelező</string>
     <string name="name">Név</string>
-    <string name="invalid_email">Érténytelen email cím</string>
+    <string name="invalid_email">Érvénytelen email cím</string>
     <string name="pickup_location">Költözködés innen</string>
     <string name="dropoff_location">Költözködés ide</string>
     <string name="use_current_location_as_pickup_location">Szeretné jelenlegi tartózkodási helyét lakcímeként beállítani?</string>
@@ -44,7 +44,7 @@
     <string name="step_five">5. lépés</string>
     <string name="instruction_vehicle_type">Adja meg, milyen jármű-típussal rendelkező Költöztetők között keressünk.\n\nEgyszerre több jármű-típus is megadható.</string>
     <string name="car">Személyautó</string>
-    <string name="van">Kisteheratuó</string>
+    <string name="van">Kisteherautó</string>
     <string name="truck">Kamion</string>
     <string name="description_car">Néhány bőrönd esetén.</string>
     <string name="description_van">Egy teljes szoba esetén.</string>
@@ -58,4 +58,31 @@
     <string name="step_eight">8. lépés</string>
     <string name="extra_information">További információk</string>
     <string name="instruction_moving_details">Adja meg az elszállítandó tételeket és azok mennyiségét.\n\nPéldául: dobozok száma, szekrények száma, mosógép, hűtő, ágy, kanapé.\n\nA csomagokról fényképeket is csatolhat.</string>
+    <string name="mover_selection">Költöztető kiválasztása</string>
+    <string name="step_nine">9. lépés</string>
+    <string name="instruction_select_your_mover">Válassza ki költöztetőjét!</string>
+    <string name="login">Bejelentkezés</string>
+    <string name="password">Jelszó</string>
+    <string name="create_account">Fiók létrehozása</string>
+    <string name="confirm_password">Megerősítés</string>
+
+
+    <string name="country_prompt">Choose a country</string>
+    <string name="password_helper_text">Legalább 8 karaktert használjon, és szerepeljenek köztük betűk, számok és szimbólumok is</string>
+    <string name="enter_a_password">Adjon meg egy jelszót</string>
+    <string name="confirm_your_password">Erősítse meg a jelszót</string>
+    <string name="passwords_did_not_match">A jelszavak nem egyeznek. Próbálja újra.</string>
+    <string name="enter_an_email">Adjon meg egy e-mail-címet</string>
+
+    <string-array name="country_arrays">
+        <item>Malaysia</item>
+        <item>United States</item>
+        <item>Indonesia</item>
+        <item>France</item>
+        <item>Italy</item>
+        <item>Singapore</item>
+        <item>New Zealand</item>
+        <item>India</item>
+    </string-array>
+
 </resources>

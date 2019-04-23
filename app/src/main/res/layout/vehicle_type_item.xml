@@ -38,7 +38,7 @@
             app:srcCompat="@drawable/ic_car" />
 
         <TextView
-            android:id="@+id/titleTextView"
+            android:id="@+id/vehicleTypeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -55,7 +55,7 @@
             android:layout_marginTop="8dp"
             android:text="Néhány bőrönd esetén."
             app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/vehicleTypeTextView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

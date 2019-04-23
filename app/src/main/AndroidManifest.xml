@@ -20,7 +20,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.MovingDetailsActivity"></activity>
+        <activity android:name=".ui.AddVehicleActivity"></activity>
+        <activity android:name=".ui.MoverSignUpActivity" />
+        <activity android:name=".ui.MoverSignInActivity" />
+        <activity android:name=".ui.SelectMoverActivity" />
+        <activity android:name=".ui.MovingDetailsActivity" android:windowSoftInputMode="adjustPan" />
         <activity android:name=".ui.LocationDetailsActivity" />
         <activity android:name=".ui.DateTimeActivity" />
         <activity android:name=".ui.SelectVehicleActivity" />
@@ -39,7 +43,7 @@
         <activity
             android:name=".ui.MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".ui.SignUpActivity" />
+        <activity android:name=".ui.ClientSignUpActivity" />
         <activity android:name=".ui.VerificationActivity" />
         <activity android:name=".ui.GetPhoneNumberActivity" />
         <activity android:name=".ui.GetStartedActivity" />

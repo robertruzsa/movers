@@ -4,7 +4,6 @@ import android.content.Intent;
 
 import android.os.Bundle;
 
-import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -51,7 +50,7 @@ public class VerificationActivity extends BaseActivity {
             verificationCodeTextInputLayout.setError(getString(R.string.invalid_verification_code));
         else {
             //Authentication.Get(getApplicationContext()).verifyEnteredCode(verificationCode, phoneNumber, verificationCodeTextInputLayout);
-            Intent intent = new Intent(this, SignUpActivity.class);
+            Intent intent = new Intent(this, ClientSignUpActivity.class);
             intent.putExtra("phoneNumber", phoneNumber);
             startActivity(intent);
         }

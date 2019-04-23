@@ -1,12 +1,9 @@
 package com.robertruzsa.movers.adapter;
 
-import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,7 +12,6 @@ import com.robertruzsa.movers.model.VehicleTypeItem;
 
 import java.util.ArrayList;
 
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.ExampleViewHolder> {
@@ -30,7 +26,7 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
         public ExampleViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
-            title = itemView.findViewById(R.id.titleTextView);
+            title = itemView.findViewById(R.id.vehicleTypeTextView);
             description = itemView.findViewById(R.id.descriptionTextView);
             checkBox = itemView.findViewById(R.id.checkBox);
         }

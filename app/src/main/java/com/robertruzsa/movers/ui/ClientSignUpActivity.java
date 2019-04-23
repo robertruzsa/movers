@@ -2,8 +2,6 @@ package com.robertruzsa.movers.ui;
 
 import android.content.Intent;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
@@ -18,14 +16,14 @@ import com.robertruzsa.movers.R;
 
 import java.util.regex.Pattern;
 
-public class SignUpActivity extends BaseActivity {
+public class ClientSignUpActivity extends BaseActivity {
 
-    private TextInputLayout nameTextInputLayout, emailTextInputLayout, phoneTextInputLayout;
-    private TextInputEditText nameEditText, emailEditText, phoneNumberEditText;
+    protected TextInputLayout nameTextInputLayout, emailTextInputLayout, phoneTextInputLayout;
+    protected TextInputEditText nameEditText, emailEditText, phoneNumberEditText;
 
-    private String phoneNumber;
+    protected String phoneNumber;
 
-    private Pattern pattern = Pattern.compile("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$");
+    private Pattern emailPattern = Pattern.compile("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +35,8 @@ public class SignUpActivity extends BaseActivity {
         setBodyTextView(getString(R.string.instruction_personal_information));
         setPageIndicatorViewProgress();
 
-        nameTextInputLayout = findViewById(R.id.nameTextInputLayout);
-        emailTextInputLayout = findViewById(R.id.emailTextInputLayout);
+        nameTextInputLayout = findViewById(R.id.moverNameTextInputLayout);
+        emailTextInputLayout = findViewById(R.id.signInMoverEmailTextInputLayout);
         phoneTextInputLayout = findViewById(R.id.phoneNumberTextInputLayout);
 
         phoneNumberEditText = (TextInputEditText) phoneTextInputLayout.getEditText();
@@ -62,7 +60,7 @@ public class SignUpActivity extends BaseActivity {
     public void saveUserData() {
         String emailAddress = emailEditText.getText().toString().trim();
         String name = nameEditText.getText().toString().trim();
-        if (validateName(name) && validateEmailAddress(emailAddress)) {
+        if (validateName(name) & validateEmailAddress(emailAddress)) {
             ParseUser.getCurrentUser().put("name", nameEditText.getText().toString());
             if (!emailEditText.equals(""))
                 ParseUser.getCurrentUser().setEmail(emailEditText.getText().toString());
@@ -84,7 +82,7 @@ public class SignUpActivity extends BaseActivity {
     }
 
     public boolean validateEmailAddress(String emailAddress) {
-        if (!emailAddress.equals("") && !pattern.matcher(emailAddress).matches()) {
+        if (!emailAddress.equals("") && !emailPattern.matcher(emailAddress).matches()) {
             emailTextInputLayout.setError(getString(R.string.invalid_email));
             return false;
         } else {
