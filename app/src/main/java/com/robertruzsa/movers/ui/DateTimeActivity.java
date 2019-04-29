@@ -35,6 +35,7 @@ public class DateTimeActivity extends BaseActivity implements DatePickerDialog.O
     private final String LANGUAGE_TAG = "HU";
     private Calendar calendar;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,23 +76,23 @@ public class DateTimeActivity extends BaseActivity implements DatePickerDialog.O
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus)
-                    timePicker.show(getSupportFragmentManager(), "time picker");
+                    timePicker.show(getSupportFragmentManager(), "requestSubmitDate picker");
             }
         });
 
         timeEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                timePicker.show(getSupportFragmentManager(), "time picker");
+                timePicker.show(getSupportFragmentManager(), "requestSubmitDate picker");
             }
         });
 
         getNextButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MovingDetailsActivity.class);
-                startActivity(intent);
-                //saveDateTime();
+                /*Intent intent = new Intent(getApplicationContext(), MovingDetailsActivity.class);
+                startActivity(intent);*/
+                saveDateTime();
             }
         });
 
@@ -125,14 +126,19 @@ public class DateTimeActivity extends BaseActivity implements DatePickerDialog.O
         }
 
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Request");
-        query.whereEqualTo("clientName", ParseUser.getCurrentUser().get("name"));
+        //query.whereEqualTo("clientName", ParseUser.getCurrentUser().get("name"));
+        query.whereEqualTo("clientId", ParseUser.getCurrentUser().getObjectId());
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
                 if (e == null) {
                     if (objects.size() > 0) {
                         ParseObject request = objects.get(0);
-                        request.put("dateTime", dateEditText.getText().toString() + " " + timeEditText.getText().toString());
+
+
+                        //request.put("dateTime", dateEditText.getText().toString() + " " + timeEditText.getText().toString());
+
+                        request.put("movingDate", calendar.getTime());
                         request.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {

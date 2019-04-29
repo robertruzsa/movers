@@ -1,15 +1,21 @@
 package com.robertruzsa.movers.ui;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.NumberPicker;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -23,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class AddVehicleActivity extends BaseActivity {
+public class AddVehicleActivity extends AppCompatActivity {
 
     private DialogFragment vehicleTypePicker;
     private DialogFragment numberPicker;
@@ -37,35 +43,64 @@ public class AddVehicleActivity extends BaseActivity {
 
     private Pattern numberPattern = Pattern.compile("\\d+(?:\\.\\d+)?");
 
+    FloatingActionButton addVehicleFAB;
+
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_vehicle);
 
-        hideViews();
+        toolbar = findViewById(R.id.addVehicleToolbar);
+        toolbar.setTitle("Járművek megadása");
+
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         vehicles = new ArrayList<>();
         vehicles.add(new VehicleItem());
 
         recyclerView = findViewById(R.id.vehiclesRecycleView);
         recyclerView.setHasFixedSize(false);
+
         layoutManager = new LinearLayoutManager(this);
         adapter = new VehicleAdapter(vehicles);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
-        MaterialButton addVehicleButton = findViewById(R.id.addVehicleButton);
-        addVehicleButton.setOnClickListener(new View.OnClickListener() {
+
+        addVehicleFAB = findViewById(R.id.moverSignUpAddVehicleFAB);
+
+        addVehicleFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validateVehicleType() & validateKilometreCharge() & validateInitialCharge() & validateRequiredHours() & validateHourlyRate()) {
+                int lastIndex = vehicles.size() - 1;
+                RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(lastIndex);
+                MaterialButton saveButton = ((VehicleAdapter.ExampleViewHolder) viewHolder).saveVehicleButton;
 
+                validateVehicleType(lastIndex);
+                validateKilometreCharge(lastIndex);
+                validateInitialCharge(lastIndex);
+                validateRequiredHours(lastIndex);
+                validateHourlyRate(lastIndex);
 
+                if (saveButton.isEnabled()) {
+                    saveButton.setError("");
+                } else {
                     vehicles.add(new VehicleItem());
-                    adapter.notifyDataSetChanged();
-                    //adapter.notifyItemInserted(vehicleItemPosition-1);
+                    adapter.notifyItemInserted(vehicles.size() - 1);
+                    recyclerView.scrollToPosition(vehicles.size() - 1);
                 }
+
+
             }
         });
 
@@ -100,7 +135,20 @@ public class AddVehicleActivity extends BaseActivity {
                 if (numberPicker.isAdded())
                     return;
                 numberPicker.show(getSupportFragmentManager(), "number picker");
+                vehicleItemPosition = position;
             }
+
+            @Override
+            public void onSaveButtonClick(int position) {
+                validateVehicleType(position);
+                validateKilometreCharge(position);
+                validateInitialCharge(position);
+                validateRequiredHours(position);
+                validateHourlyRate(position);
+                vehicleItemPosition = position;
+                //adapter.notifyDataSetChanged();
+            }
+
         });
 
         adapter.setOnFocusChangeListener(new VehicleAdapter.OnFocusChangeListener() {
@@ -123,12 +171,13 @@ public class AddVehicleActivity extends BaseActivity {
 
     }
 
+
     NumberPicker.OnValueChangeListener onVehicleTypeValueChangeListener = new NumberPicker.OnValueChangeListener() {
         @Override
         public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
             vehicles.get(vehicleItemPosition).setVehicleType(picker.getDisplayedValues()[newVal]);
 
-            RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(vehicles.size() - 1);
+            RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(/*vehicles.size() - 1*/vehicleItemPosition);
             TextInputLayout vehicleTypeTextInputLayout = ((VehicleAdapter.ExampleViewHolder) viewHolder).vehicleType;
             vehicleTypeTextInputLayout.getEditText().setText(picker.getDisplayedValues()[newVal]);
             vehicleTypeTextInputLayout.clearFocus();
@@ -141,27 +190,26 @@ public class AddVehicleActivity extends BaseActivity {
     NumberPicker.OnValueChangeListener onRequiredHoursValueChangeListener = new NumberPicker.OnValueChangeListener() {
         @Override
         public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-            RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(vehicles.size() - 1);
+            RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(vehicleItemPosition);
             TextInputLayout requiredHoursTextInputLayout = ((VehicleAdapter.ExampleViewHolder) viewHolder).requiredHours;
             requiredHoursTextInputLayout.getEditText().setText(String.valueOf(newVal));
             requiredHoursTextInputLayout.clearFocus();
         }
     };
 
-    public boolean validateVehicleType() {
-        RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(vehicles.size() - 1);
+    public boolean validateVehicleType(int position) {
+        RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(position);
         TextInputLayout vehicleTypeTextInputLayout = ((VehicleAdapter.ExampleViewHolder) viewHolder).vehicleType;
 
         return isNotEmpty(vehicleTypeTextInputLayout);
     }
 
-    public boolean validateKilometreCharge() {
-        int lastIndex = vehicles.size() - 1;
-        RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(lastIndex);
+    public boolean validateKilometreCharge(int position) {
+        RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(position);
         TextInputLayout kilometreChargeTextInputLayout = ((VehicleAdapter.ExampleViewHolder) viewHolder).kilometreCharge;
 
         if (isNotEmpty(kilometreChargeTextInputLayout) && isNumber(kilometreChargeTextInputLayout.getEditText().getText().toString().trim())) {
-            vehicles.get(lastIndex).setKilometreCharge(kilometreChargeTextInputLayout.getEditText().getText().toString().trim());
+            vehicles.get(position).setKilometreCharge(kilometreChargeTextInputLayout.getEditText().getText().toString().trim());
             return true;
         } else if (!isNotEmpty(kilometreChargeTextInputLayout)) {
             kilometreChargeTextInputLayout.setError(getString(R.string.required));
@@ -172,13 +220,12 @@ public class AddVehicleActivity extends BaseActivity {
         }
     }
 
-    public boolean validateInitialCharge() {
-        int lastIndex = vehicles.size() - 1;
-        RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(vehicles.size() - 1);
+    public boolean validateInitialCharge(int position) {
+        RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(position);
         TextInputLayout initialChargeTextInputLayout = ((VehicleAdapter.ExampleViewHolder) viewHolder).initialCharge;
 
         if (isNotEmpty(initialChargeTextInputLayout) && isNumber(initialChargeTextInputLayout.getEditText().getText().toString().trim())) {
-            vehicles.get(lastIndex).setInitialCharge(initialChargeTextInputLayout.getEditText().getText().toString().trim());
+            vehicles.get(position).setInitialCharge(initialChargeTextInputLayout.getEditText().getText().toString().trim());
             return true;
         } else if (!isNotEmpty(initialChargeTextInputLayout)) {
             initialChargeTextInputLayout.setError(getString(R.string.required));
@@ -189,13 +236,12 @@ public class AddVehicleActivity extends BaseActivity {
         }
     }
 
-    public boolean validateRequiredHours() {
-        int lastIndex = vehicles.size() - 1;
-        RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(lastIndex);
+    public boolean validateRequiredHours(int position) {
+        RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(position);
         TextInputLayout requiredHoursTextInputLayout = ((VehicleAdapter.ExampleViewHolder) viewHolder).requiredHours;
 
         if (isNotEmpty(requiredHoursTextInputLayout) && isNumber(requiredHoursTextInputLayout.getEditText().getText().toString().trim())) {
-            vehicles.get(lastIndex).setRequiredHours(requiredHoursTextInputLayout.getEditText().getText().toString().trim());
+            vehicles.get(position).setRequiredHours(requiredHoursTextInputLayout.getEditText().getText().toString().trim());
             return true;
         } else if (!isNotEmpty(requiredHoursTextInputLayout)) {
             requiredHoursTextInputLayout.setError(null);
@@ -206,13 +252,12 @@ public class AddVehicleActivity extends BaseActivity {
         }
     }
 
-    public boolean validateHourlyRate() {
-        int lastIndex = vehicles.size() - 1;
-        RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(lastIndex);
+    public boolean validateHourlyRate(int position) {
+        RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(position);
         TextInputLayout hourlyRateTextInputLayout = ((VehicleAdapter.ExampleViewHolder) viewHolder).hourlyRate;
 
         if (isNotEmpty(hourlyRateTextInputLayout) && isNumber(hourlyRateTextInputLayout.getEditText().getText().toString().trim())) {
-            vehicles.get(lastIndex).setHourlyRate(hourlyRateTextInputLayout.getEditText().getText().toString().trim());
+            vehicles.get(position).setHourlyRate(hourlyRateTextInputLayout.getEditText().getText().toString().trim());
             return true;
         } else if (!isNotEmpty(hourlyRateTextInputLayout)) {
             hourlyRateTextInputLayout.setError(null);
@@ -239,13 +284,22 @@ public class AddVehicleActivity extends BaseActivity {
     }
 
     public void next(View view) {
-        if (validateVehicleType() & validateKilometreCharge() & validateInitialCharge() & validateRequiredHours() & validateHourlyRate()) {
+        int lastIndex = vehicles.size() - 1;
+        RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(lastIndex);
+        MaterialButton saveButton = ((VehicleAdapter.ExampleViewHolder) viewHolder).saveVehicleButton;
+        validateVehicleType(lastIndex);
+        validateKilometreCharge(lastIndex);
+        validateInitialCharge(lastIndex);
+        validateRequiredHours(lastIndex);
+        validateHourlyRate(lastIndex);
+        if (saveButton.isEnabled()) {
+            saveButton.setError("");
+        } else {
             saveVehicles();
         }
-
     }
 
-    public void saveVehicles(){
+    public void saveVehicles() {
         List<ParseObject> parseVehicles = new ArrayList<>();
         for (VehicleItem vehicleItem : vehicles) {
             ParseObject vehicle = new ParseObject("Vehicle");
@@ -269,4 +323,5 @@ public class AddVehicleActivity extends BaseActivity {
             }
         });
     }
+
 }

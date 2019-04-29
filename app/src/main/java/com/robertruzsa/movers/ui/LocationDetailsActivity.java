@@ -2,7 +2,9 @@ package com.robertruzsa.movers.ui;
 
 import androidx.fragment.app.DialogFragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -66,9 +68,9 @@ public class LocationDetailsActivity extends BaseActivity {
         getNextButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), DateTimeActivity.class);
-                startActivity(intent);
-                //saveLocationDetails();
+                /*Intent intent = new Intent(getApplicationContext(), DateTimeActivity.class);
+                startActivity(intent);*/
+                saveLocationDetails();
             }
         });
 
@@ -138,26 +140,35 @@ public class LocationDetailsActivity extends BaseActivity {
         if (!validateFloorNumber(pickupLocFloorNumberTextInputLayout) | !validateFloorNumber(dropoffLocFloorNumberTextInputLayout))
             return;
 
-        ParseObject pickupLocationDetails = new ParseObject("LocationDetails");
-        pickupLocationDetails.put("floorNumber", pickupLocFloorNumberEditText.getText().toString());
-        pickupLocationDetails.put("elevator", pickupLocElevatorCheckBox.isChecked());
-        pickupLocationDetails.put("parkingInfo", pickupLocDetailsEditText.getText().toString());
+        ParseObject locationDetails = new ParseObject("LocationDetails");
+        locationDetails.put("pickupLocationFloorNumber", pickupLocFloorNumberEditText.getText().toString());
+        locationDetails.put("pickupLocationElevator", pickupLocElevatorCheckBox.isChecked());
+        locationDetails.put("pickupLocationParkingInfo", pickupLocDetailsEditText.getText().toString());
+        locationDetails.put("dropoffLocationFloorNumber", dropoffLocFloorNumberEditText.getText().toString());
+        locationDetails.put("dropoffLocationElevator", dropoffLocElevatorCheckBox.isChecked());
+        locationDetails.put("dropoffLocationParkingInfo", dropoffLocDetailsEditText.getText().toString());
 
-        ParseObject dropoffLocationDetails = new ParseObject("LocationDetails");
-        dropoffLocationDetails.put("floorNumber", dropoffLocFloorNumberEditText.getText().toString());
-        dropoffLocationDetails.put("elevator", dropoffLocElevatorCheckBox.isChecked());
-        dropoffLocationDetails.put("parkingInfo", dropoffLocDetailsEditText.getText().toString());
+        SharedPreferences sharedPreferences;
+        sharedPreferences = this.getSharedPreferences("com.robertruzsa.movers", Context.MODE_PRIVATE);
+        float distance = sharedPreferences.getFloat("distance", 0);
+        locationDetails.put("distanceInKilometers", distance);
+
+        try {
+            locationDetails.save();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Request");
-        query.whereEqualTo("clientName", ParseUser.getCurrentUser().get("name"));
+        //query.whereEqualTo("clientName", ParseUser.getCurrentUser().get("name"));
+        query.whereEqualTo("clientId", ParseUser.getCurrentUser().getObjectId());
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
                 if (e == null) {
                     if (objects.size() > 0) {
                         ParseObject request = objects.get(0);
-                        request.put("pickupLocationDetails", pickupLocationDetails);
-                        request.put("dropoffLocationDetails", dropoffLocationDetails);
+                        request.put("locationDetails", locationDetails.getObjectId());
                         request.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {

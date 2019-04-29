@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_requests"
+            android:icon="@drawable/ic_inbox"
+            android:title="Kérések" />
+
+        <item
+            android:id="@+id/nav_time_sheet"
+            android:icon="@drawable/ic_calendar"
+            android:title="Ráérés" />
+        <item
+            android:id="@+id/nav_removals"
+            android:icon="@drawable/ic_history"
+            android:title="Korábbi költöztetések" />
+        <item
+            android:id="@+id/nav_reviews"
+            android:icon="@drawable/ic_message"
+            android:title="Értékelések" />
+        <item
+            android:id="@+id/nav_vehicles"
+            android:icon="@drawable/ic_car_front"
+            android:title="Járművek" />
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_user"
+            android:title="Profil" />
+
+    </group>
+
+</menu>

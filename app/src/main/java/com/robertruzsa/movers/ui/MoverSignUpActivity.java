@@ -37,7 +37,7 @@ public class MoverSignUpActivity extends BaseActivity {
 
         hideViews();
 
-        nameTextInputLayout = findViewById(R.id.moverNameTextInputLayout);
+        nameTextInputLayout = findViewById(R.id.signUpMoverNameTextInputLayout);
         nameEditText = (TextInputEditText) nameTextInputLayout.getEditText();
 
         emailTextInputLayout = findViewById(R.id.signUpMoverEmailTextInputLayout);
@@ -83,6 +83,7 @@ public class MoverSignUpActivity extends BaseActivity {
     View.OnTouchListener onConfirmPasswordEditTextTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
+            Log.i("touch", "touch");
             final int DRAWABLE_RIGHT = 2;
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 if (event.getRawX() >= (confirmPasswordEditText.getRight() - confirmPasswordEditText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {

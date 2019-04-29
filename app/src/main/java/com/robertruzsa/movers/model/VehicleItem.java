@@ -1,9 +1,10 @@
 package com.robertruzsa.movers.model;
 
 public class VehicleItem {
-    private String vehicleType, kilometreCharge, initialCharge, requiredHours, hourlyRate;
+    private String id, vehicleType, kilometreCharge, initialCharge, requiredHours, hourlyRate;
 
-    public VehicleItem(String vehicleType, String kilometreCharge, String initialCharge, String requiredHours, String hourlyRate) {
+    public VehicleItem(String id, String vehicleType, String kilometreCharge, String initialCharge, String requiredHours, String hourlyRate) {
+        this.id = id;
         this.vehicleType = vehicleType;
         this.kilometreCharge = kilometreCharge;
         this.initialCharge = initialCharge;
@@ -57,5 +58,9 @@ public class VehicleItem {
 
     public void setHourlyRate(String hourlyRate) {
         this.hourlyRate = hourlyRate;
+    }
+
+    public String getId() {
+        return id;
     }
 }

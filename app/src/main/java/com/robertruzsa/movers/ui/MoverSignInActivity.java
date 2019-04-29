@@ -3,17 +3,12 @@ package com.robertruzsa.movers.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.gson.annotations.SerializedName;
-import com.parse.LogInCallback;
-import com.parse.ParseException;
-import com.parse.ParseUser;
 import com.robertruzsa.movers.R;
 
 public class MoverSignInActivity extends BaseActivity {
@@ -24,7 +19,7 @@ public class MoverSignInActivity extends BaseActivity {
     Boolean isPasswordVisible = false;
     Boolean isConfirmPasswordVisible = false;
 
-    private MaterialButton nextButton;
+    private MaterialButton moverSignInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +35,15 @@ public class MoverSignInActivity extends BaseActivity {
         passwordEditText = (TextInputEditText) passwordTextInputLayout.getEditText();
 
         passwordEditText.setOnTouchListener(onPasswordEditTextTouchListener);
+
+        /*moverSignInButton = findViewById(R.id.moverSignInButton);
+        moverSignInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MoverHomeActivity.class);
+                startActivity(intent);
+            }
+        });*/
     }
 
     public void createAccount(View view) {
@@ -90,7 +94,7 @@ public class MoverSignInActivity extends BaseActivity {
     }
 
     public void signIn(View view) {
-        String emailAddress = emailEditText.getText().toString().trim();
+        /*String emailAddress = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
         if (validateEmailAddress(emailAddress) & validatePassword(password)) {
             ParseUser.logInInBackground(emailAddress, password, new LogInCallback() {
@@ -98,11 +102,17 @@ public class MoverSignInActivity extends BaseActivity {
                 public void done(ParseUser user, ParseException e) {
                     if (user != null) {
                         Log.i("Sign in", "Successful");
+                        Intent intent = new Intent(getApplicationContext(), MoverHomeActivity.class);
+                        startActivity(intent);
                     } else {
                         Log.i("Error", e.toString());
                     }
                 }
             });
-        }
+        }*/
+
+        Intent intent = new Intent(getApplicationContext(), MoverHomeActivity.class);
+        startActivity(intent);
+
     }
 }

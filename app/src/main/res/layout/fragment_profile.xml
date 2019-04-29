@@ -5,25 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
-    android:focusableInTouchMode="true"
-    tools:context=".ui.MoverSignUpActivity">
+    android:focusableInTouchMode="true">
 
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/profilePictureImageView"
+        android:layout_width="144dp"
+        android:layout_height="144dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
-        android:text="Fiók létrehozása"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+        android:src="@drawable/ic_profile_photo"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.545"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <ImageButton
+        android:id="@+id/changeProfilePictureImageButton"
+        android:layout_width="124dp"
+        android:layout_height="36dp"
+        android:background="@drawable/circle_segment"
+        android:onClick="addPhoto"
+        app:layout_constraintBottom_toBottomOf="@+id/profilePictureImageView"
+        app:layout_constraintEnd_toEndOf="@+id/profilePictureImageView"
+        app:layout_constraintStart_toStartOf="@+id/profilePictureImageView"
+        app:srcCompat="@drawable/ic_camera" />
+
+
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/signUpMoverNameTextInputLayout"
+        android:id="@+id/profileMoverNameTextInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,18 +44,22 @@
         android:hint="@string/name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView">
+        app:layout_constraintTop_toBottomOf="@+id/profilePictureImageView">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_person"
+            android:drawableEnd="@drawable/ic_edit"
             android:drawablePadding="15dp"
-            android:inputType="textPersonName" />
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:inputType="textPersonName"
+            android:textColor="@color/colorGreyDisabled" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/signUpMoverEmailTextInputLayout"
+        android:id="@+id/profileMoverEmailTextInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -54,82 +69,63 @@
         android:hint="@string/email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signUpMoverNameTextInputLayout">
+        app:layout_constraintTop_toBottomOf="@+id/profileMoverNameTextInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_email"
             android:drawablePadding="15dp"
+            android:enabled="false"
             android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/signUpMoverPasswordTextInputLayout"
+        android:id="@+id/profilePhoneNumberTextInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:hint="@string/password"
-        app:helperText="@string/password_helper_text"
+        android:hint="@string/phone_number"
+        android:padding="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signUpMoverEmailTextInputLayout">
+        app:layout_constraintTop_toBottomOf="@+id/profileMoverEmailTextInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:longClickable="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/ic_visibility_off"
-            android:inputType="textPassword"
-            android:textSelectHandle="@drawable/empty_image" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/moverConfirmPasswordTextInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:hint="@string/confirm_password"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signUpMoverPasswordTextInputLayout">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:longClickable="false"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/ic_visibility_off"
-            android:inputType="textPassword"
-            android:textSelectHandle="@drawable/empty_image" />
+            android:drawableStart="@drawable/ic_phone"
+            android:drawableEnd="@drawable/ic_edit"
+            android:drawablePadding="15dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:inputType="phone"
+            android:textColor="@color/colorGreyDisabled" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/moverSignInButton"
+        android:id="@+id/profileSaveButton"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:text="Mentés"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profilePhoneNumberTextInputLayout" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/profileSignOutButton"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:onClick="moverSignIn"
-        android:text="@string/login"
+        android:layout_marginTop="32dp"
+        android:text="Kijelentkezés"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/moverConfirmPasswordTextInputLayout" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/moverSignUpNextButton"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/next"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/moverConfirmPasswordTextInputLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/profilePhoneNumberTextInputLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

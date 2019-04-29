@@ -26,7 +26,7 @@
             app:srcCompat="@drawable/ic_user" />
 
         <TextView
-            android:id="@+id/vehicleTypeTextView"
+            android:id="@+id/clientNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -57,10 +57,10 @@
             android:isIndicator="true"
             android:rating="4.5"
             app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/vehicleTypeTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/clientNameTextView" />
 
         <TextView
-            android:id="@+id/ratingTextView"
+            android:id="@+id/movingDateTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -68,7 +68,7 @@
             android:text="4.5"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
             app:layout_constraintStart_toEndOf="@+id/ratingBar"
-            app:layout_constraintTop_toBottomOf="@+id/vehicleTypeTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/clientNameTextView" />
 
         <TextView
             android:id="@+id/ratingCountTextView"
@@ -78,8 +78,8 @@
             android:layout_marginTop="8dp"
             android:text="(146)"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-            app:layout_constraintStart_toEndOf="@+id/ratingTextView"
-            app:layout_constraintTop_toBottomOf="@+id/vehicleTypeTextView" />
+            app:layout_constraintStart_toEndOf="@+id/movingDateTextView"
+            app:layout_constraintTop_toBottomOf="@+id/clientNameTextView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

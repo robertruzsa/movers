@@ -35,9 +35,9 @@ public class ClientSignUpActivity extends BaseActivity {
         setBodyTextView(getString(R.string.instruction_personal_information));
         setPageIndicatorViewProgress();
 
-        nameTextInputLayout = findViewById(R.id.moverNameTextInputLayout);
-        emailTextInputLayout = findViewById(R.id.signInMoverEmailTextInputLayout);
-        phoneTextInputLayout = findViewById(R.id.phoneNumberTextInputLayout);
+        nameTextInputLayout = findViewById(R.id.signUpClientNameTextInputLayout);
+        emailTextInputLayout = findViewById(R.id.signUpClientEmailTextInputLayout);
+        phoneTextInputLayout = findViewById(R.id.signUpClientPhoneNumberTextInputLayout);
 
         phoneNumberEditText = (TextInputEditText) phoneTextInputLayout.getEditText();
         phoneNumber = getIntent().getStringExtra("phoneNumber");

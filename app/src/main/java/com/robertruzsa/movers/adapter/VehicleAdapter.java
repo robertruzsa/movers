@@ -1,5 +1,6 @@
 package com.robertruzsa.movers.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,10 @@ import com.robertruzsa.movers.ui.VehicleTypePickerFragment;
 
 import java.util.ArrayList;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.TransitionManager;
 
 public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.ExampleViewHolder> {
     private ArrayList<VehicleItem> vehicleItems;
@@ -24,12 +27,17 @@ public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.ExampleV
 
     public interface OnItemClickListener {
         void onVehicleTypeEditTextClick(int position);
+
         void onRemoveVehicleButtonClick(int position);
+
         void onRequiredHoursEditTextClick(int position);
+
+        void onSaveButtonClick(int position);
     }
 
     public interface OnFocusChangeListener {
         void onVehicleTypeEditTextFocusChange(int position);
+
         void onRequiredHoursEditTextFocusChange(int position);
     }
 
@@ -41,9 +49,13 @@ public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.ExampleV
         this.onFocusChangeListener = onFocusChangeListener;
     }
 
+    public void setVehicleItems(ArrayList<VehicleItem> vehicleItems) {
+        this.vehicleItems = vehicleItems;
+    }
+
     public static class ExampleViewHolder extends RecyclerView.ViewHolder {
         public TextInputLayout vehicleType, kilometreCharge, initialCharge, requiredHours, hourlyRate;
-        public MaterialButton removeVehicleButton;
+        public MaterialButton removeVehicleButton, saveVehicleButton, editVehicleButton;
 
         ExampleViewHolder(View itemView, OnItemClickListener onItemClickListener, OnFocusChangeListener onFocusChangeListener) {
             super(itemView);
@@ -53,6 +65,8 @@ public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.ExampleV
             requiredHours = itemView.findViewById(R.id.requiredHoursTextInputLayout);
             hourlyRate = itemView.findViewById(R.id.hourlyRateTextInputLayout);
             removeVehicleButton = itemView.findViewById(R.id.removeVehicleButton);
+            saveVehicleButton = itemView.findViewById(R.id.saveVehicleButton);
+            editVehicleButton = itemView.findViewById(R.id.editVehicleButton);
 
             removeVehicleButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -63,6 +77,42 @@ public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.ExampleV
                             onItemClickListener.onRemoveVehicleButtonClick(position);
                         }
                     }
+                }
+            });
+
+            saveVehicleButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onItemClickListener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            onItemClickListener.onSaveButtonClick(position);
+                        }
+                    }
+
+                    if (vehicleType.getError() == null && kilometreCharge.getError() == null && initialCharge.getError() == null) {
+                        saveVehicleButton.setEnabled(false);
+                        editVehicleButton.setEnabled(true);
+                        removeVehicleButton.setEnabled(false);
+                        saveVehicleButton.setError(null);
+                        setCardViewEnabled(false);
+                    }
+
+                }
+            });
+
+            editVehicleButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editVehicleButton.setEnabled(false);
+                    saveVehicleButton.setEnabled(true);
+
+                    if (((RecyclerView) itemView.getParent()).getChildCount() > 1)
+                        removeVehicleButton.setEnabled(true);
+                    else
+                        removeVehicleButton.setEnabled(false);
+
+                    setCardViewEnabled(true);
                 }
             });
 
@@ -116,6 +166,22 @@ public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.ExampleV
                 }
             });
         }
+
+        public void setCardViewEnabled(boolean isEnabled) {
+            vehicleType.setEnabled(isEnabled);
+            kilometreCharge.setEnabled(isEnabled);
+            initialCharge.setEnabled(isEnabled);
+            requiredHours.setEnabled(isEnabled);
+            hourlyRate.setEnabled(isEnabled);
+        }
+
+        public void setButtonsDisabled() {
+            setCardViewEnabled(false);
+            editVehicleButton.setEnabled(true);
+            removeVehicleButton.setEnabled(false);
+            saveVehicleButton.setEnabled(false);
+        }
+
     }
 
     public VehicleAdapter(ArrayList<VehicleItem> vehicleItems) {
@@ -126,6 +192,7 @@ public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.ExampleV
     public ExampleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.add_vehicle_item, parent, false);
         ExampleViewHolder exampleViewHolder = new ExampleViewHolder(view, onItemClickListener, onFocusChangeListener);
+        //exampleViewHolder.setIsRecyclable(false);
         return exampleViewHolder;
     }
 
@@ -137,6 +204,7 @@ public class VehicleAdapter extends RecyclerView.Adapter<VehicleAdapter.ExampleV
         holder.initialCharge.getEditText().setText(currentItem.getInitialCharge());
         holder.requiredHours.getEditText().setText(currentItem.getRequiredHours());
         holder.hourlyRate.getEditText().setText(currentItem.getHourlyRate());
+        holder.removeVehicleButton.setEnabled(false);
     }
 
     @Override

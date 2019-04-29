@@ -26,7 +26,7 @@ public class VehicleTypeAdapter extends RecyclerView.Adapter<VehicleTypeAdapter.
         public ExampleViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
-            title = itemView.findViewById(R.id.vehicleTypeTextView);
+            title = itemView.findViewById(R.id.clientNameTextView);
             description = itemView.findViewById(R.id.descriptionTextView);
             checkBox = itemView.findViewById(R.id.checkBox);
         }

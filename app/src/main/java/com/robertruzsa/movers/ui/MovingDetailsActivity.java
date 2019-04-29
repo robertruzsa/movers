@@ -150,7 +150,8 @@ public class MovingDetailsActivity extends BaseActivity {
 
         if (!movingDetails.equals("") || !images.isEmpty()) {
             ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Request");
-            query.whereEqualTo("clientName", ParseUser.getCurrentUser().get("name"));
+            //query.whereEqualTo("clientName", ParseUser.getCurrentUser().get("name"));
+            query.whereEqualTo("clientId", ParseUser.getCurrentUser().getObjectId());
             query.findInBackground(new FindCallback<ParseObject>() {
                 @Override
                 public void done(List<ParseObject> objects, ParseException e) {

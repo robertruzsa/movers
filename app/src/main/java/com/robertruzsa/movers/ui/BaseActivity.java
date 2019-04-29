@@ -36,6 +36,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     ConstraintLayout constraintLayout;
 
+    FloatingActionButton floatingActionButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +55,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         backButton = (MaterialButton) bottomNavigationBar.getChildAt(0);
         pageIndicatorView = (PageIndicatorView) bottomNavigationBar.getChildAt(1);
         nextButton = (MaterialButton) bottomNavigationBar.getChildAt(2);
+        floatingActionButton = coordinatorLayout.findViewById(R.id.floatingActionButton);
 
         constraintLayout = coordinatorLayout.findViewById(R.id.constraintLayout);
         constraintLayout.setOnClickListener(new View.OnClickListener() {
@@ -145,4 +148,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         return pageIndicatorView;
     }
 
+    public FloatingActionButton getFloatingActionButton() {
+        return floatingActionButton;
+    }
 }

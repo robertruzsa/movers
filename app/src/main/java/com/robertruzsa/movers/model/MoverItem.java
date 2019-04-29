@@ -7,12 +7,12 @@ import java.util.List;
 
 public class MoverItem {
     private int imageResource;
-    private String id, name, price;
+    private String id, name;
     private float rating;
-    private int ratingCount;
+    private int price, ratingCount;
     private boolean isSelected = false;
 
-    public MoverItem(int imageResource, String id, String name, String price, float rating, int ratingCount) {
+    public MoverItem(int imageResource, String id, String name, int price, float rating, int ratingCount) {
         this.imageResource = imageResource;
         this.id = id;
         this.name = name;
@@ -33,7 +33,7 @@ public class MoverItem {
         return name;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
 

@@ -23,7 +23,7 @@
             android:padding="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/signInMoverEmailTextInputLayout">
+            app:layout_constraintTop_toBottomOf="@+id/profileMoverEmailTextInputLayout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -121,11 +121,39 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/removeVehicleButton"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Törlés"
+            android:enabled="false"
+            app:icon="@drawable/ic_delete"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:layout_constraintStart_toEndOf="@+id/editVehicleButton"
+            app:layout_constraintTop_toBottomOf="@+id/requiredHoursTextInputLayout" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/saveVehicleButton"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:icon="@drawable/ic_save"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:layout_constraintStart_toEndOf="@+id/removeVehicleButton"
+            app:layout_constraintTop_toBottomOf="@+id/requiredHoursTextInputLayout" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/editVehicleButton"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:enabled="false"
+            app:icon="@drawable/ic_edit"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/requiredHoursTextInputLayout" />
 

@@ -1,28 +1,27 @@
 package com.robertruzsa.movers.adapter;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.google.android.material.card.MaterialCardView;
 import com.robertruzsa.movers.R;
 import com.robertruzsa.movers.model.MoverItem;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
-import androidx.appcompat.view.menu.MenuView;
-import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MoverAdapter extends RecyclerView.Adapter<MoverAdapter.ExampleViewHolder> {
     private ArrayList<MoverItem> moverItems;
 
+
+    private static final String CURRENCY = " Ft";
     private int selectedPosition = -1;
 
     public static class ExampleViewHolder extends RecyclerView.ViewHolder {
@@ -36,10 +35,10 @@ public class MoverAdapter extends RecyclerView.Adapter<MoverAdapter.ExampleViewH
         public ExampleViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
-            name = itemView.findViewById(R.id.vehicleTypeTextView);
+            name = itemView.findViewById(R.id.clientNameTextView);
             price = itemView.findViewById(R.id.priceTextView);
             ratingBar = itemView.findViewById(R.id.ratingBar);
-            rating = itemView.findViewById(R.id.ratingTextView);
+            rating = itemView.findViewById(R.id.movingDateTextView);
             ratingCount = itemView.findViewById(R.id.ratingCountTextView);
         }
     }
@@ -60,7 +59,11 @@ public class MoverAdapter extends RecyclerView.Adapter<MoverAdapter.ExampleViewH
         MoverItem currentItem = moverItems.get(position);
         holder.imageView.setImageResource(currentItem.getImageResource());
         holder.name.setText(currentItem.getName());
-        holder.price.setText(currentItem.getPrice());
+
+        NumberFormat format = NumberFormat.getInstance(Locale.forLanguageTag("HU"));
+        String price = format.format(currentItem.getPrice()) + CURRENCY;
+        holder.price.setText(price);
+
         holder.ratingBar.setRating(currentItem.getRating());
         holder.rating.setText(String.format("%.1f", currentItem.getRating()));
         holder.ratingCount.setText("(" + String.valueOf(currentItem.getRatingCount()) + ")");

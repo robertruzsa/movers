@@ -66,7 +66,6 @@
     <string name="create_account">Fiók létrehozása</string>
     <string name="confirm_password">Megerősítés</string>
 
-
     <string name="country_prompt">Choose a country</string>
     <string name="password_helper_text">Legalább 8 karaktert használjon, és szerepeljenek köztük betűk, számok és szimbólumok is</string>
     <string name="enter_a_password">Adjon meg egy jelszót</string>
@@ -84,5 +83,8 @@
         <item>New Zealand</item>
         <item>India</item>
     </string-array>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 
 </resources>

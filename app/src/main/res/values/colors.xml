@@ -12,5 +12,7 @@
     <color name="colorBlueHint">#477D95</color>
     <color name="colorGreyInactive">#6c6f70</color>
     <color name="colorGreyDark">#757575</color>
+    <color name="colorGreyDisabled">#B9B9B9</color>
+    <color name="colorGreyPrimary">#747474</color>
 
 </resources>

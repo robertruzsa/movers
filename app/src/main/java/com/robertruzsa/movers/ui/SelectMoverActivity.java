@@ -40,7 +40,6 @@ public class SelectMoverActivity extends BaseActivity {
     private ArrayList<VehicleItem> vehicleItems;
     private SharedPreferences sharedPreferences;
 
-    private static final String CURRENCY = " Ft";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,13 +131,15 @@ public class SelectMoverActivity extends BaseActivity {
                     Log.i("reqHours", requiredHours);
                     Log.i("hourlyRate", hourlyRate);*/
 
-                    NumberFormat format = NumberFormat.getInstance(Locale.forLanguageTag("HU"));
-                    String price = format.format(getPrice(distance, kilometreCharge, initialCharge, requiredHours, hourlyRate));
+                    int calculatedPrice = getPrice(distance, kilometreCharge, initialCharge, requiredHours, hourlyRate);
+
+                    /*NumberFormat format = NumberFormat.getInstance(Locale.forLanguageTag("HU"));
+                    String price = format.format(calculatedPrice);*/
 
                     float rating = getRating(userId);
                     int ratingCount = getRatingCount(userId);
 
-                    moverList.add(new MoverItem(R.drawable.ic_user, userId, moverName, price + CURRENCY, rating, ratingCount));
+                    moverList.add(new MoverItem(R.drawable.ic_user, userId, moverName, calculatedPrice, rating, ratingCount));
                     adapter.notifyDataSetChanged();
 
                    /* VehicleItem vehicleItem = new VehicleItem(vehicleType, kilometreCharge,initialCharge,requiredHours,hourlyRate);
@@ -211,7 +212,8 @@ public class SelectMoverActivity extends BaseActivity {
 
     private void saveSelectedMover() {
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Request");
-        query.whereEqualTo("clientName", ParseUser.getCurrentUser().get("name"));
+        //query.whereEqualTo("clientName", ParseUser.getCurrentUser().get("name"));
+        query.whereEqualTo("clientId", ParseUser.getCurrentUser().getObjectId());
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
@@ -220,10 +222,11 @@ public class SelectMoverActivity extends BaseActivity {
                 else {
                     ParseObject request = objects.get(0);
                     request.put("moverId", getSelectedMoverId());
+                    request.put("calculatedPrice", moverList.get(getSelectedMoverIndex()).getPrice());
                     request.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
-                            if (e!= null)
+                            if (e != null)
                                 Log.i("Error", e.toString());
                             else
                                 Log.i("Request", "Request sent");
@@ -239,6 +242,13 @@ public class SelectMoverActivity extends BaseActivity {
         while (!moverList.get(i).isSelected())
             i++;
         return moverList.get(i).getId();
+    }
+
+    private int getSelectedMoverIndex() {
+        int i = 0;
+        while (!moverList.get(i).isSelected())
+            i++;
+        return i;
     }
 
 }

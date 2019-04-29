@@ -137,13 +137,13 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
 
-                sharedPreferences.edit().putFloat("distance", distanceInKilometers()).apply();
+                sharedPreferences.edit().putFloat("distance", getDistanceInKilometers()).apply();
 
-                Intent intent = new Intent(getApplicationContext(), LocationDetailsActivity.class);
+                /*Intent intent = new Intent(getApplicationContext(), LocationDetailsActivity.class);
                 intent.putExtra("pickupLocation", locAEditText.getText().toString());
                 intent.putExtra("dropoffLocation", locBEditText.getText().toString());
-                startActivity(intent);
-                //saveRequest();
+                startActivity(intent);*/
+                saveRequest();
             }
         });
 
@@ -487,12 +487,15 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
         });*/
 
         ParseObject request = new ParseObject("Request");
+        request.put("clientId", ParseUser.getCurrentUser().getObjectId());
         request.put("clientName", ParseUser.getCurrentUser().get("name"));
         //request.put("phoneNumber", ParseUser.getCurrentUser().get("phoneNumber"));
 
         if (validateLocation(pickupLocation, locAEditText) & validateLocation(dropoffLocation, locBEditText)) {
-            request.put("pickupLocation", new ParseGeoPoint(pickupLocation.latitude, pickupLocation.longitude));
-            request.put("dropoffLocation", dropoffLocation.toString().replace("lat/lng: ", ""));
+            request.put("pickupLocationLatLng", new ParseGeoPoint(pickupLocation.latitude, pickupLocation.longitude));
+            request.put("dropoffLocationLatLng", dropoffLocation.toString().replace("lat/lng: ", ""));
+            request.put("pickupLocation", locAEditText.getText().toString());
+            request.put("dropoffLocation", locBEditText.getText().toString());
         } else
             return;
 
@@ -522,7 +525,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
         }
     }
 
-    public float distanceInKilometers(){
+    public float getDistanceInKilometers(){
         Location location1 = new Location("");
         location1.setLatitude(pickupLocation.latitude);
         location1.setLongitude(pickupLocation.longitude);
@@ -530,7 +533,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback {
         Location location2 = new Location("");
         location2.setLatitude(dropoffLocation.latitude);
         location2.setLongitude(dropoffLocation.longitude);
-
 
         return location1.distanceTo(location2) / 1000;
     }
