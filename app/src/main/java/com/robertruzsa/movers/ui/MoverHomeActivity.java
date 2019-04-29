@@ -8,11 +8,13 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.os.Bundle;
-import android.provider.Telephony;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
 import com.robertruzsa.movers.R;
+import com.robertruzsa.movers.model.RequestItem;
+
+import java.util.ArrayList;
 
 public class MoverHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -58,9 +60,9 @@ public class MoverHomeActivity extends AppCompatActivity implements NavigationVi
                 toolbar.setTitle("Kérések");
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new RequestsFragment()).commit();
                 break;
-            case R.id.nav_time_sheet:
-                toolbar.setTitle("Ráérés");
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new TimeSheetFragment()).commit();
+            case R.id.nav_calendar:
+                toolbar.setTitle("Naptár");
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new CalendarFragment()).commit();
                 break;
             case R.id.nav_profile:
                 toolbar.setTitle("Profil");
@@ -69,6 +71,10 @@ public class MoverHomeActivity extends AppCompatActivity implements NavigationVi
             case R.id.nav_vehicles:
                 toolbar.setTitle("Járművek");
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new VehiclesFragment()).commit();
+                break;
+            case R.id.nav_reviews:
+                toolbar.setTitle("Értékelések");
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new ReviewsFragment()).commit();
                 break;
         }
 

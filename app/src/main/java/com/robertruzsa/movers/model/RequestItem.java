@@ -25,6 +25,13 @@ public class RequestItem {
         this.movingDate = movingDate;
     }
 
+    public RequestItem(String clientName, Date movingDate, String pickupLocation, String dropoffLocation) {
+        this.clientName = clientName;
+        this. movingDate = movingDate;
+        this.pickupLocation = pickupLocation;
+        this.dropoffLocation = dropoffLocation;
+    }
+
     public int getImageResource() {
         return imageResource;
     }

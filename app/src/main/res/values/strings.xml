@@ -3,7 +3,7 @@
     <string name="app_logo">App logo</string>
     <string name="client">Költözködő</string>
     <string name="mover">Költöztető</string>
-    <string name="instruction_get_started">Költözkődő vagy Költöztető módban szeretné használni az alkalmazást?\n\nFolytatás, mint:</string>
+    <string name="instruction_get_started">Költözkődő vagy Költöztető módban szeretné használni az alkalmazást?\n\nFolytatás mint:</string>
     <string name="instruction_phone_number">Adja meg telefonszámát, hogy felvehessük Önnel a kapcsolatot.</string>
     <string name="next">Tovább</string>
     <string name="verification">Verifikáció</string>
@@ -86,5 +86,6 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="lorem_ipsum">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</string>
 
 </resources>

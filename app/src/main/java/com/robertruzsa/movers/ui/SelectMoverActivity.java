@@ -165,7 +165,10 @@ public class SelectMoverActivity extends BaseActivity {
     }
 
     private int getInt(String string) {
-        return Integer.parseInt(string);
+        if (string.equals(""))
+            return 0;
+        else
+            return Integer.parseInt(string);
     }
 
     private ParseUser getUser(String userId) {
